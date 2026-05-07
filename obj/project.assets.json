@@ -8,24 +8,31 @@
     "net10.0": []
   },
   "packageFolders": {
-    "/Users/gentahalilintar/.nuget/packages/": {}
+    "C:\\Users\\ahmad rajulu alrasyi\\.nuget\\packages\\": {},
+    "D:\\Visual Studio\\Share Tool, Product, and SDKs\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/gentahalilintar/Documents/KPL/tubes-hub/tubes-hub.csproj",
+      "projectUniqueName": "D:\\rekapan materi semester\\Sem 4\\tugas\\Konstruksi\\TP\\Tubes_KPL\\Tubes-Hub-KPL-\\tubes-hub.csproj",
       "projectName": "tubes-hub",
-      "projectPath": "/Users/gentahalilintar/Documents/KPL/tubes-hub/tubes-hub.csproj",
-      "packagesPath": "/Users/gentahalilintar/.nuget/packages/",
-      "outputPath": "/Users/gentahalilintar/Documents/KPL/tubes-hub/obj/",
+      "projectPath": "D:\\rekapan materi semester\\Sem 4\\tugas\\Konstruksi\\TP\\Tubes_KPL\\Tubes-Hub-KPL-\\tubes-hub.csproj",
+      "packagesPath": "C:\\Users\\ahmad rajulu alrasyi\\.nuget\\packages\\",
+      "outputPath": "D:\\rekapan materi semester\\Sem 4\\tugas\\Konstruksi\\TP\\Tubes_KPL\\Tubes-Hub-KPL-\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "D:\\Visual Studio\\Share Tool, Product, and SDKs\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/Users/gentahalilintar/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\ahmad rajulu alrasyi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -65,7 +72,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.103/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.CSharp": "(,4.7.32767]",
           "Microsoft.VisualBasic": "(,10.4.32767]",
