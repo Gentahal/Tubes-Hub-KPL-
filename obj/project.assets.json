@@ -8,19 +8,19 @@
     "net10.0": []
   },
   "packageFolders": {
-    "/Users/gentahalilintar/.nuget/packages/": {}
+    "/Users/ariefzaky/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/gentahalilintar/Documents/KPL/tubes-hub/tubes-hub.csproj",
+      "projectUniqueName": "/Users/Task/Semester 4/Software Construction (Practic)/TUBES/Tubes-Hub-KPL-/tubes-hub.csproj",
       "projectName": "tubes-hub",
-      "projectPath": "/Users/gentahalilintar/Documents/KPL/tubes-hub/tubes-hub.csproj",
-      "packagesPath": "/Users/gentahalilintar/.nuget/packages/",
-      "outputPath": "/Users/gentahalilintar/Documents/KPL/tubes-hub/obj/",
+      "projectPath": "/Users/Task/Semester 4/Software Construction (Practic)/TUBES/Tubes-Hub-KPL-/tubes-hub.csproj",
+      "packagesPath": "/Users/ariefzaky/.nuget/packages/",
+      "outputPath": "/Users/Task/Semester 4/Software Construction (Practic)/TUBES/Tubes-Hub-KPL-/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/gentahalilintar/.nuget/NuGet/NuGet.Config"
+        "/Users/ariefzaky/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
