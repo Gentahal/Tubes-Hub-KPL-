@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Diagnostics; // Wajib ditambahkan untuk mengukur waktu (Performance Testing)
+using System.Diagnostics; // untuk mengukur waktu (Performance Testing)
 using System.Threading.Tasks;
 using TubesHub.ModulProgress;
 
@@ -16,14 +16,15 @@ namespace TubesHub
             Console.WriteLine(">>> Menguji API (Tanggal Libur) sekaligus Performance Testing...");
             DateTime liburNasional = new DateTime(2026, 8, 17);
             
-            Stopwatch timer = new Stopwatch(); // 1. Siapkan alat ukur
-            timer.Start();                     // 2. Mulai hitung milidetik
+            // TIMER PERFORMANCE TESTING
+            Stopwatch timer = new Stopwatch(); 
+            timer.Start();                     
 
             bool isLibur1 = await HolidayChecker.IsHolidayAsync(liburNasional);
             
-            timer.Stop();                      // 3. Matikan hitungan setelah API merespons
+            timer.Stop();                      
 
-            // Tampilkan hasil Performance Testing
+            // Tampilkan hasil 
             Console.WriteLine($"[Performance] Waktu respons API: {timer.ElapsedMilliseconds} ms");
             Console.WriteLine($"Hasil pengecekan bool: {isLibur1}\n");
 

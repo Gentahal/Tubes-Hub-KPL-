@@ -2,7 +2,7 @@ using System;
 
 namespace TubesHub.ModulProgress
 {
-    // Ubah nama menjadi TaskState agar tidak bentrok
+ 
     public enum TaskState
     {
         ToDo,
@@ -13,7 +13,7 @@ namespace TubesHub.ModulProgress
     public class TaskItem
     {
         public string Title { get; private set; }
-        public TaskState CurrentState { get; private set; } // Ubah tipe datanya
+        public TaskState CurrentState { get; private set; }
         public int Progress { get; private set; }
 
         public TaskItem(string title)
@@ -26,7 +26,7 @@ namespace TubesHub.ModulProgress
             Progress = 0;
         }
 
-        public void TransitionTo(TaskState nextState) // Ubah parameternya
+        public void TransitionTo(TaskState nextState) 
         {
             bool isValidTransition = false;
 

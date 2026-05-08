@@ -11,10 +11,10 @@ namespace TubesHub.ModulProgress
     public class Holiday
     {
         [JsonPropertyName("date")]
-        public string? Date { get; set; } // Tambahkan ?
+        public string? Date { get; set; }
 
         [JsonPropertyName("localName")]
-        public string? LocalName { get; set; } // Tambahkan ?
+        public string? LocalName { get; set; } 
     }
 
     public class HolidayChecker
