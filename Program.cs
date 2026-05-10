@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-// Pastikan using ini sesuai dengan struktur project-mu
 using TubesHub.ModulProgress;
 using tubes_hub.Tubes_Hub_KPL_;
 
@@ -9,7 +8,6 @@ namespace TubesHub
 {
     class Program
     {
-        // Menggunakan async Task Main karena ada fungsi await di Modul Progress
         static async Task Main(string[] args)
         {
             bool isProgramRunning = true;
@@ -40,7 +38,6 @@ namespace TubesHub
             }
         }
 
-        // --- KODE MILIKMU (DARI HEAD) ---
         static async Task TestModulProgress()
         {
             Console.WriteLine("\n=== Simulasi Modul Progress & API (Tubes Hub) ===");
@@ -78,7 +75,6 @@ namespace TubesHub
             }
         }
 
-        // --- KODE DARI GITHUB (DARI origin/main) ---
         static void TestModulWbs()
         {
             Console.WriteLine("\n=== INISIALISASI PROYEK TUBES HUB ===");

@@ -4,7 +4,6 @@ using System.Linq;
 
 namespace tubes_hub.Tubes_Hub_KPL_
 {
-    //Generics
     public class TaskItem<T>
     {
         public string Category { get; set; }
@@ -27,7 +26,6 @@ namespace tubes_hub.Tubes_Hub_KPL_
 
     public class WBSModule
     {
-        //table Driven
         private static readonly Dictionary<string, (int weight, int dayMultiplier)> WBSConfig =
             new Dictionary<string, (int, int)>
         {

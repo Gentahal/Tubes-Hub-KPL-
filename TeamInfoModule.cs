@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using System.Text.Json; // Teknik 2: Code Reuse / Library
+using System.Text.Json; 
 
 namespace TubesHub
 {
@@ -8,9 +8,8 @@ namespace TubesHub
     {
         public static void Jalankan()
         {
-            string filePath = "team.json"; // Teknik 1: Runtime Configuration
+            string filePath = "team.json"; 
 
-            // Defensive Programming (DbC): Mencegah error jika file tidak ada
             if (!File.Exists(filePath))
             {
                 Console.WriteLine("[ERROR DbC] File konfigurasi team.json tidak ditemukan!");
@@ -19,7 +18,6 @@ namespace TubesHub
 
             string jsonString = File.ReadAllText(filePath);
 
-            // Menggunakan library untuk parsing
             using (JsonDocument document = JsonDocument.Parse(jsonString))
             {
                 Console.WriteLine("=== Daftar Tim Tubes Hub ===");
