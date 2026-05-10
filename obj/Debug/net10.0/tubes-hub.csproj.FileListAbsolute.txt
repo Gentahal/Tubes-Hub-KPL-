@@ -13,3 +13,11 @@
 /Users/Task/Semester 4/Software Construction (Practic)/TUBES/Tubes-Hub-KPL-/obj/Debug/net10.0/tubes-hub.pdb
 /Users/Task/Semester 4/Software Construction (Practic)/TUBES/Tubes-Hub-KPL-/obj/Debug/net10.0/tubes-hub.genruntimeconfig.cache
 /Users/Task/Semester 4/Software Construction (Practic)/TUBES/Tubes-Hub-KPL-/obj/Debug/net10.0/ref/tubes-hub.dll
+/Users/gentahalilintar/Documents/KPL/tubes-hub/obj/Debug/net10.0/tubes-hub.GeneratedMSBuildEditorConfig.editorconfig
+/Users/gentahalilintar/Documents/KPL/tubes-hub/obj/Debug/net10.0/tubes-hub.AssemblyInfoInputs.cache
+/Users/gentahalilintar/Documents/KPL/tubes-hub/obj/Debug/net10.0/tubes-hub.AssemblyInfo.cs
+/Users/gentahalilintar/Documents/KPL/tubes-hub/obj/Debug/net10.0/tubes-hub.csproj.CoreCompileInputs.cache
+/Users/gentahalilintar/Documents/KPL/tubes-hub/obj/Debug/net10.0/tubes-hub.sourcelink.json
+/Users/gentahalilintar/Documents/KPL/tubes-hub/obj/Debug/net10.0/tubes-hub.dll
+/Users/gentahalilintar/Documents/KPL/tubes-hub/obj/Debug/net10.0/refint/tubes-hub.dll
+/Users/gentahalilintar/Documents/KPL/tubes-hub/obj/Debug/net10.0/tubes-hub.pdb
