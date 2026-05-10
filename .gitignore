@@ -480,10 +480,7 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
-<<<<<<< HEAD
-=======
 
 # .NET Build results
 [Bb]in/
 [Oo]bj/
->>>>>>> origin/main
