@@ -1,23 +1,54 @@
 ﻿using System;
-<<<<<<< HEAD
-using System.Diagnostics; // untuk mengukur waktu (Performance Testing)
+using System.Diagnostics;
 using System.Threading.Tasks;
+// Pastikan using ini sesuai dengan struktur project-mu
 using TubesHub.ModulProgress;
+using tubes_hub.Tubes_Hub_KPL_;
 
 namespace TubesHub
 {
     class Program
     {
+        // Menggunakan async Task Main karena ada fungsi await di Modul Progress
         static async Task Main(string[] args)
         {
-            Console.WriteLine("=== Simulasi Modul Progress & API (Tubes Hub) ===");
+            bool isProgramRunning = true;
+            while (isProgramRunning)
+            {
+                Console.WriteLine("\n=== MENU UTAMA TUBES HUB KPL ===");
+                Console.WriteLine("1. Jalankan Modul Progress & API (Versi Kamu)");
+                Console.WriteLine("2. Jalankan Modul WBS (Versi Github)");
+                Console.WriteLine("0. Keluar Aplikasi");
+                Console.Write("Pilih menu: ");
+                
+                string mainChoice = Console.ReadLine();
+                switch (mainChoice)
+                {
+                    case "1":
+                        await TestModulProgress();
+                        break;
+                    case "2":
+                        TestModulWbs();
+                        break;
+                    case "0":
+                        isProgramRunning = false;
+                        break;
+                    default:
+                        Console.WriteLine("Pilihan tidak valid!");
+                        break;
+                }
+            }
+        }
+
+        // --- KODE MILIKMU (DARI HEAD) ---
+        static async Task TestModulProgress()
+        {
+            Console.WriteLine("\n=== Simulasi Modul Progress & API (Tubes Hub) ===");
             Console.WriteLine("-------------------------------------------------\n");
 
-            // --- PERFORMANCE TESTING & TEST API HARI LIBUR ---
             Console.WriteLine(">>> Menguji API (Tanggal Libur) sekaligus Performance Testing...");
             DateTime liburNasional = new DateTime(2026, 8, 17);
             
-            // TIMER PERFORMANCE TESTING
             Stopwatch timer = new Stopwatch(); 
             timer.Start();                     
 
@@ -25,39 +56,32 @@ namespace TubesHub
             
             timer.Stop();                      
 
-            // Tampilkan hasil 
             Console.WriteLine($"[Performance] Waktu respons API: {timer.ElapsedMilliseconds} ms");
             Console.WriteLine($"Hasil pengecekan bool: {isLibur1}\n");
 
-
-            // --- TEST API TANGGAL BIASA ---
             Console.WriteLine(">>> Menguji API (Tanggal Biasa)");
             DateTime hariBiasa = new DateTime(2026, 5, 10); 
             bool isLibur2 = await HolidayChecker.IsHolidayAsync(hariBiasa);
             Console.WriteLine($"Hasil pengecekan bool: {isLibur2}\n");
 
-
-            // --- TEST AUTOMATA ---
             Console.WriteLine(">>> Menguji Automata Progress");
             try 
             {
                 TaskItem task1 = new TaskItem("Integrasi UI Terminal");
                 task1.TransitionTo(TaskState.InProgress);
                 task1.UpdateProgress(30);
+                Console.WriteLine("Automata berjalan sukses.");
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-=======
-using tubes_hub.Tubes_Hub_KPL_;
+            }
+        }
 
-namespace tubes_hub.Tubes_Hub_KPL_
-{
-    class Program
-    {
-        static void Main(string[] args)
+        // --- KODE DARI GITHUB (DARI origin/main) ---
+        static void TestModulWbs()
         {
-            Console.WriteLine("=== INISIALISASI PROYEK TUBES HUB ===");
+            Console.WriteLine("\n=== INISIALISASI PROYEK TUBES HUB ===");
             Console.Write("Proyek dimulai bulan ke (1-12): ");
             int startMonth;
             while (!int.TryParse(Console.ReadLine(), out startMonth) || startMonth < 1 || startMonth > 12)
@@ -66,14 +90,14 @@ namespace tubes_hub.Tubes_Hub_KPL_
             }
 
             WBSModule wbs = new WBSModule(startMonth);
-            bool isRunning = true;
+            bool isRunningWbs = true;
 
-            while (isRunning)
+            while (isRunningWbs)
             {
                 Console.WriteLine("\n--- MENU UTAMA WBS ---");
                 Console.WriteLine("1. Tambah Tugas Baru");
                 Console.WriteLine("2. Lihat Timeline Perencanaan");
-                Console.WriteLine("3. Keluar");
+                Console.WriteLine("3. Kembali ke Menu Utama");
                 Console.Write("Pilih: ");
                 string choice = Console.ReadLine();
 
@@ -117,9 +141,8 @@ namespace tubes_hub.Tubes_Hub_KPL_
                 }
                 else if (choice == "3")
                 {
-                    isRunning = false;
+                    isRunningWbs = false;
                 }
->>>>>>> origin/main
             }
         }
     }
