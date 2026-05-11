@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Text.Json;
+using System.Collections.Generic;
 
 namespace TubesHub
 {
@@ -21,16 +23,33 @@ namespace TubesHub
             Console.WriteLine("Status dokumen saat ini (dari Config):");
             Console.WriteLine(konten);
 
-            Console.Write("Ubah status dokumen menjadi (Draft/Revisi/Siap Kumpul): ");
-            string input = Console.ReadLine();
+            var dataLaporan = JsonSerializer.Deserialize<Dictionary<string, string>>(konten);
+
+            Console.Write("\nPilih Bab yang ingin diupdate (Bab1/Bab2/Bab3): ");
+            string bab = Console.ReadLine() ?? "";
+
+            if (dataLaporan == null || !dataLaporan.ContainsKey(bab))
+            {
+                Console.WriteLine("[ERROR DbC] Bab tidak ditemukan dalam konfigurasi laporan.json!");
+                return;
+            }
+
+            Console.Write($"Ubah status {bab} menjadi (Draft/Revisi/Siap Kumpul): ");
+            string input = Console.ReadLine() ?? "";
 
             if (Array.IndexOf(ValidStates, input) == -1)
             {
-                Console.WriteLine("[ERROR DbC] Status tidak valid! Automata menolak transisi.");
+                Console.WriteLine("[ERROR DbC] Status tidak valid! Automata menolak transisi state.");
             }
             else
             {
-                Console.WriteLine($"Status dokumen berhasil bertransisi ke state: {input}");
+                Console.WriteLine($"Status {bab} berhasil bertransisi ke state: {input}");
+
+                dataLaporan[bab] = input;
+                string updatedJson = JsonSerializer.Serialize(dataLaporan, new JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText(filePath, updatedJson);
+
+                Console.WriteLine("[INFO] File laporan.json berhasil diperbarui!");
             }
         }
     }
