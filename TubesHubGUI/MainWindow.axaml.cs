@@ -19,17 +19,17 @@ namespace TubesHubGUI
 
         private void NavWbs_Click(object sender, RoutedEventArgs e)
         {
-            MainContentArea.Content = new TextBlock { Text = "Halaman WBS milik Ahmad sedang dikerjakan...", FontSize = 18, Margin = new Avalonia.Thickness(20) };
+            MainContentArea.Content = new TextBlock { Text = "Halaman WBS milik sedang dikerjakan...", FontSize = 18, Margin = new Avalonia.Thickness(20) };
         }
 
         private void NavProgress_Click(object sender, RoutedEventArgs e)
         {
-            MainContentArea.Content = new TextBlock { Text = "Halaman Progress milik Aufa sedang dikerjakan...", FontSize = 18, Margin = new Avalonia.Thickness(20) };
+            MainContentArea.Content = new TextBlock { Text = "Halaman Progress sedang dikerjakan...", FontSize = 18, Margin = new Avalonia.Thickness(20) };
         }
 
         private void NavTeam_Click(object sender, RoutedEventArgs e)
         {
-            MainContentArea.Content = new TextBlock { Text = "Halaman Team Info milik Zaidan sedang dikerjakan...", FontSize = 18, Margin = new Avalonia.Thickness(20) };
+            MainContentArea.Content = new TextBlock { Text = "Halaman Team Info sedang dikerjakan...", FontSize = 18, Margin = new Avalonia.Thickness(20) };
         }
 
         private void NavScheduler_Click(object sender, RoutedEventArgs e)
