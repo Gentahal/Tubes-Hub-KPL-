@@ -2,8 +2,25 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:local="clr-namespace:TubesHubGUI"
+        mc:Ignorable="d"
+        Width="500" Height="650"
+        WindowStartupLocation="CenterScreen"
         x:Class="TubesHubGUI.MainWindow"
-        Title="TubesHubGUI">
-    Welcome to Avalonia!
+        Title="Tubes Hub - Menu Utama"
+        Background="#1e1e1e">
+
+	<Grid RowDefinitions="Auto, *">
+		<Border Grid.Row="0" Background="#2d2d2d" Padding="15" BorderBrush="#3d3d3d" BorderThickness="0,0,0,1">
+			<TextBlock Text="TUBES HUB HUB - KPL 2026" FontSize="16" FontWeight="Bold" Foreground="#DEFF9A" HorizontalAlignment="Center"/>
+		</Border>
+
+		<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+			<StackPanel Margin="20" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+				<local:SchedulerView />
+
+			</StackPanel>
+		</ScrollViewer>
+	</Grid>
 </Window>
