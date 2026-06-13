@@ -13,7 +13,7 @@
                 <Button Content="1. Progress (Aufa)" Click="NavProgress_Click" Width="190" Background="#3E3E42" Foreground="White"/>
                 <Button Content="2. WBS (Ahmad)" Click="NavWbs_Click" Width="190" Background="#3E3E42" Foreground="White"/>
                 <Button Content="3. Team Info (Zaidan)" Click="NavTeam_Click" Width="190" Background="#3E3E42" Foreground="White"/>
-                <Button Content="4. Scheduler (Khaydir)" Click="NavScheduler_Click" Width="190" Background="#3E3E42" Foreground="White"/>
+                <Button Content="4. Scheduler (Khaydir/Faras)" Click="NavScheduler_Click" Width="190" Background="#3E3E42" Foreground="White"/>
                 
                 <Button Content="5. Finalisasi (Genta)" Click="NavFinalisasi_Click" Width="190" Background="#0078D7" Foreground="White" FontWeight="Bold"/>
             </StackPanel>

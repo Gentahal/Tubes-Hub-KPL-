@@ -1,0 +1,30 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="TubesHubGUI.SchedulerView">
+
+	<StackPanel Margin="20" Spacing="15" Width="400" HorizontalAlignment="Center">
+		<TextBlock Text="Modul Scheduler - Koordinasi Tim" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center"/>
+
+		<TextBlock Text="Pilih Hari Diskusi:"/>
+		<ComboBox x:Name="CmbHari" HorizontalAlignment="Stretch">
+			<ComboBoxItem Content="Senin"/>
+			<ComboBoxItem Content="Selasa"/>
+			<ComboBoxItem Content="Rabu"/>
+			<ComboBoxItem Content="Kamis"/>
+			<ComboBoxItem Content="Jumat"/>
+			<ComboBoxItem Content="Sabtu"/>
+			<ComboBoxItem Content="Minggu"/>
+		</ComboBox>
+
+		<Button x:Name="BtnCek" Content="Cek Jadwal &amp; Cuaca"
+                HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                Background="#DEFF9A" Foreground="Black" FontWeight="Bold" Click="BtnCek_Click"/>
+
+		<TextBlock x:Name="LblLokasi" Text="Lokasi Kumpul Utama: -" FontWeight="Medium"/>
+		<TextBlock x:Name="LblSuhu" Text="Suhu Saat Ini: -" FontWeight="Medium"/>
+
+		<Border x:Name="PnlSaran" Background="#333" Padding="10" CornerRadius="5">
+			<TextBlock x:Name="LblSaran" Text="Saran: Pilih hari dan klik cek." TextWrapping="Wrap"/>
+		</Border>
+	</StackPanel>
+</UserControl>

@@ -31,20 +31,20 @@ namespace TubesHub
                 using (HttpClient client = new HttpClient())
                 {
                     string url = "https://api.open-meteo.com/v1/forecast?latitude=-6.97&longitude=107.63&current_weather=true";
-                    
-                    HttpResponseMessage response = client.GetAsync(url).Result; 
+
+                    HttpResponseMessage response = client.GetAsync(url).Result;
 
                     if (response.IsSuccessStatusCode)
                     {
                         string jsonString = response.Content.ReadAsStringAsync().Result;
-                        
+
                         using (JsonDocument document = JsonDocument.Parse(jsonString))
                         {
                             JsonElement currentWeather = document.RootElement.GetProperty("current_weather");
                             double suhu = currentWeather.GetProperty("temperature").GetDouble();
-                            
+
                             Console.WriteLine($"[API Berhasil] Suhu saat ini: {suhu}°C.");
-                            
+
                             if (suhu > 30)
                             {
                                 Console.WriteLine("Saran: Cuaca cukup panas, sebaiknya kumpul di ruangan ber-AC atau via Discord.");
