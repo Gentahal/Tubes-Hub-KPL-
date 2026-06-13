@@ -11,7 +11,7 @@ namespace TubesHubGUI
         public FinalisasiView()
         {
             InitializeComponent();
-            LoadStatus(); // Langsung load JSON saat halaman dibuka
+            LoadStatus();
         }
 
         private void LoadStatus()
@@ -43,19 +43,16 @@ namespace TubesHubGUI
 
                 if (selectedBab != null && selectedStatus != null)
                 {
-                    // Panggil logika utama C#
                     FinalisasiModule.UbahStatusDokumen(selectedBab, selectedStatus);
 
-                    // Update UI jika berhasil
                     PesanTextBlock.Foreground = Brushes.Green;
                     PesanTextBlock.Text = $"[INFO] Status {selectedBab} berhasil diubah menjadi {selectedStatus}!";
 
-                    LoadStatus(); // Refresh teks status dokumen di layar
+                    LoadStatus();
                 }
             }
             catch (Exception ex)
             {
-                // Jika DbC / Automata menolak, tampilkan error warna merah di GUI
                 PesanTextBlock.Foreground = Brushes.Red;
                 PesanTextBlock.Text = ex.Message;
             }
