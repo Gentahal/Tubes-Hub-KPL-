@@ -8,8 +8,16 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-<ItemGroup>
+  <ItemGroup>
+    <Compile Remove="TubesHubGUI\**" />
+    <Content Remove="TubesHubGUI\**" />
+    <EmbeddedResource Remove="TubesHubGUI\**" />
+    <None Remove="TubesHubGUI\**" />
+    
     <Compile Remove="ModulProgressTests\**" />
+    <Content Remove="ModulProgressTests\**" />
+    <EmbeddedResource Remove="ModulProgressTests\**" />
+    <None Remove="ModulProgressTests\**" />
   </ItemGroup>
   
 </Project>
