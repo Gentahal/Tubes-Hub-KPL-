@@ -1,26 +1,27 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TubesHubGUI"
-        mc:Ignorable="d"
-        Width="500" Height="650"
-        WindowStartupLocation="CenterScreen"
         x:Class="TubesHubGUI.MainWindow"
-        Title="Tubes Hub - Menu Utama"
-        Background="#1e1e1e">
+        Title="Tubes Hub - Dashboard"
+        Width="900" Height="600"
+        WindowStartupLocation="CenterScreen">
 
-	<Grid RowDefinitions="Auto, *">
-		<Border Grid.Row="0" Background="#2d2d2d" Padding="15" BorderBrush="#3d3d3d" BorderThickness="0,0,0,1">
-			<TextBlock Text="TUBES HUB HUB - KPL 2026" FontSize="16" FontWeight="Bold" Foreground="#DEFF9A" HorizontalAlignment="Center"/>
-		</Border>
+    <Grid ColumnDefinitions="220, *">
+        <Border Grid.Column="0" Background="#2D2D30" Padding="15">
+            <StackPanel Spacing="10">
+                <TextBlock Text="TUBES HUB" Foreground="White" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                
+                <Button Content="1. Progress (Aufa)" Click="NavProgress_Click" Width="190" Background="#3E3E42" Foreground="White"/>
+                <Button Content="2. WBS (Ahmad)" Click="NavWbs_Click" Width="190" Background="#3E3E42" Foreground="White"/>
+                <Button Content="3. Team Info (Zaidan)" Click="NavTeam_Click" Width="190" Background="#3E3E42" Foreground="White"/>
+                <Button Content="4. Scheduler (Khaydir/Faras)" Click="NavScheduler_Click" Width="190" Background="#3E3E42" Foreground="White"/>
+                
+                <Button Content="5. Finalisasi (Genta)" Click="NavFinalisasi_Click" Width="190" Background="#0078D7" Foreground="White" FontWeight="Bold"/>
+            </StackPanel>
+        </Border>
 
-		<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-			<StackPanel Margin="20" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Border Grid.Column="1" Background="#F5F5F5">
+            <ContentControl x:Name="MainContentArea" Margin="10"/>
+        </Border>
+    </Grid>
 
-				<local:SchedulerView />
-
-			</StackPanel>
-		</ScrollViewer>
-	</Grid>
 </Window>
