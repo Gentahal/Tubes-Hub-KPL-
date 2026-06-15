@@ -38,7 +38,7 @@ namespace TubesHub
                         SchedulerModule.Jalankan();
                         break;
                     case "5":
-                        FinalisasiModule.Jalankan();
+                        Console.WriteLine("Modul Finalisasi sudah dipindahkan ke versi GUI.");
                         break;
                     case "0":
                         isProgramRunning = false;
