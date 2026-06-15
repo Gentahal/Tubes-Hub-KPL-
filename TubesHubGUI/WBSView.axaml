@@ -1,0 +1,56 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="TubesHubGUI.WBSView">
+    <Grid Margin="10" RowDefinitions="Auto,Auto,*,Auto">
+
+        <TextBlock Grid.Row="0" Text="WORK BREAKDOWN STRUCTURE (WBS)"
+                   FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+
+        <!-- Input Area -->
+        <Border Grid.Row="1" Background="White" CornerRadius="4" Padding="15" Margin="0,0,0,10"
+                BoxShadow="0 1 3 0 #20000000">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*,Auto,*">
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Bulan Mulai Proyek (1-12):" VerticalAlignment="Center" Margin="0,5,10,5"/>
+                <StackPanel Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal" Spacing="10">
+                    <TextBox x:Name="TxtStartMonth" Width="80" Margin="0,5"/>
+                    <Button x:Name="BtnInitProject" Content="Inisialisasi Proyek" Margin="0,5" Padding="10,4"
+                            Background="#0078D7" Foreground="White" Click="BtnInitProject_Click"/>
+                </StackPanel>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Kategori:" VerticalAlignment="Center" Margin="0,5,10,5"/>
+                <ComboBox x:Name="CmbCategory" Grid.Row="1" Grid.Column="1" Margin="0,5,10,5" IsEnabled="False" HorizontalAlignment="Stretch">
+                    <ComboBoxItem Content="UI"/>
+                    <ComboBoxItem Content="BACKEND"/>
+                    <ComboBoxItem Content="DATABASE"/>
+                    <ComboBoxItem Content="DOKUMENTASI"/>
+                    <ComboBoxItem Content="TESTING"/>
+                </ComboBox>
+
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="Judul:" VerticalAlignment="Center" Margin="0,5,10,5"/>
+                <TextBox x:Name="TxtTitle" Grid.Row="1" Grid.Column="3" Margin="0,5" IsEnabled="False"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Deskripsi:" VerticalAlignment="Center" Margin="0,5,10,5"/>
+                <TextBox x:Name="TxtDesc" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,5" IsEnabled="False"/>
+
+                <Button x:Name="BtnAddTask" Grid.Row="3" Grid.Column="3" Content="Tambah Tugas"
+                        HorizontalAlignment="Right" Padding="10,4" Margin="0,10,0,0"
+                        Background="#0078D7" Foreground="White"
+                        IsEnabled="False" Click="BtnAddTask_Click"/>
+            </Grid>
+        </Border>
+
+        <!-- Timeline Display -->
+        <Border Grid.Row="2" Background="White" CornerRadius="4" Padding="15" BoxShadow="0 1 3 0 #20000000">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" Text="Timeline Perencanaan Proyek" FontWeight="Bold" Margin="0,0,0,5"/>
+                <ScrollViewer>
+                    <ItemsControl x:Name="TimelinePanel"/>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+
+        <!-- Status -->
+        <TextBlock x:Name="TxtStatus" Grid.Row="3" Margin="0,10,0,0" Foreground="DarkGreen" FontStyle="Italic"/>
+    </Grid>
+</UserControl>
