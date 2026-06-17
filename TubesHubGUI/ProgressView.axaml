@@ -1,0 +1,69 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="TubesHubGUI.ProgressView">
+    
+    <ScrollViewer>
+        <Border Background="White" CornerRadius="10" Padding="30" Margin="20"
+                BoxShadow="0 4 15 0 #15000000">
+            
+            <StackPanel Spacing="20">
+                
+                <TextBlock Text="Modul Progress &amp; API" FontSize="28" FontWeight="Bold" Foreground="#1E1E1E" />
+                <TextBlock Text="Check progresi tugas modul anda di sini." Foreground="#666666" FontSize="14" Margin="0,-15,0,10"/>
+
+                <Separator Background="#E0E0E0" Height="1"/>
+
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*, 160">
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Nama Tugas:" FontWeight="SemiBold" FontSize="14" Foreground="#333333" Margin="0,0,0,8"/>
+                    <TextBox Grid.Row="1" Grid.Column="0" x:Name="TaskNameInput" PlaceholderText="Masukkan nama tugas baru..." Margin="0,0,15,20" CornerRadius="6" Height="40" VerticalContentAlignment="Center" BorderBrush="#CCCCCC"/>
+                    <Button Grid.Row="1" Grid.Column="1" Content="Buat Tugas" Click="CreateTask_Click" Background="#0078D7" Foreground="White" FontWeight="Bold" CornerRadius="6" Cursor="Hand" HorizontalAlignment="Stretch" Height="40" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,20"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="Deadline (Format: YYYY-MM-DD):" FontWeight="SemiBold" FontSize="14" Foreground="#333333" Margin="0,0,0,8"/>
+                    <TextBox Grid.Row="3" Grid.Column="0" x:Name="DateInput" PlaceholderText="Contoh: 2026-08-17" Margin="0,0,15,20" CornerRadius="6" Height="40" VerticalContentAlignment="Center" BorderBrush="#CCCCCC"/>
+                    <Button Grid.Row="3" Grid.Column="1" Content="Cek Libur (API)" Click="CheckApi_Click" Background="#28A745" Foreground="White" FontWeight="Bold" CornerRadius="6" Cursor="Hand" HorizontalAlignment="Stretch" Height="40" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,20"/>
+
+                    <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Text="Ubah Status (Automata):" FontWeight="SemiBold" FontSize="14" Foreground="#333333" Margin="0,0,0,8"/>
+                    <ComboBox Grid.Row="5" Grid.Column="0" x:Name="StatusCombo" SelectedIndex="0" HorizontalAlignment="Stretch" Margin="0,0,15,20" CornerRadius="6" Height="40" VerticalContentAlignment="Center" BorderBrush="#CCCCCC" Background="White" Foreground="Black">
+                        <ComboBoxItem>To Do</ComboBoxItem>
+                        <ComboBoxItem>In Progress</ComboBoxItem>
+                        <ComboBoxItem>Done</ComboBoxItem>
+                    </ComboBox>
+                    <Button Grid.Row="5" Grid.Column="1" Content="Update Status" Click="ChangeStatus_Click" Background="#FFC107" Foreground="Black" FontWeight="Bold" CornerRadius="6" Cursor="Hand" HorizontalAlignment="Stretch" Height="40" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,20"/>
+
+                    <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Text="Update Progress (%):" FontWeight="SemiBold" FontSize="14" Foreground="#333333" Margin="0,0,0,8"/>
+                    <TextBox Grid.Row="7" Grid.Column="0" x:Name="ProgressInput" PlaceholderText="0 - 100" Margin="0,0,15,0" CornerRadius="6" Height="40" VerticalContentAlignment="Center" BorderBrush="#CCCCCC"/>
+                    <Button Grid.Row="7" Grid.Column="1" Content="Update Progress" Click="UpdateProgress_Click" Background="#17A2B8" Foreground="White" FontWeight="Bold" CornerRadius="6" Cursor="Hand" HorizontalAlignment="Stretch" Height="40" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                </Grid>
+
+                <Separator Background="#E0E0E0" Height="1" Margin="0,10,0,5"/>
+
+                <TextBlock Text="Terminal Output:" FontWeight="SemiBold" FontSize="16" Foreground="#333333" Margin="0,0,0,5"/>
+                
+                <Border Background="#09090B" CornerRadius="8" 
+                        BorderBrush="#444444" BorderThickness="1.5" 
+                        BoxShadow="0 8 30 -5 #CC000000" MinHeight="140">
+                    <StackPanel>
+                        <Border Background="#18181B" CornerRadius="8,8,0,0" Padding="12,8">
+                            <Grid ColumnDefinitions="Auto, *, Auto">
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                    <Ellipse Width="12" Height="12" Fill="#FF5F56"/>
+                                    <Ellipse Width="12" Height="12" Fill="#FFBD2E"/>
+                                    <Ellipse Width="12" Height="12" Fill="#27C93F"/>
+                                </StackPanel>
+                                
+                                <TextBlock Grid.Column="1" Text="TubesHub // Engine" Foreground="#A1A1AA" FontSize="12" FontWeight="Bold" FontFamily="Courier New" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                
+                                <TextBlock Grid.Column="2" Text="● ONLINE" Foreground="#4AF626" FontSize="10" FontWeight="Bold" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+                        
+                        <Border Padding="15">
+                            <TextBlock x:Name="OutputText" Text="> Sistem siap. Menunggu perintah selanjutnya..." Foreground="#4AF626" FontFamily="Courier New" TextWrapping="Wrap" FontSize="14" LineHeight="22"/>
+                        </Border>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+    </ScrollViewer>
+</UserControl>

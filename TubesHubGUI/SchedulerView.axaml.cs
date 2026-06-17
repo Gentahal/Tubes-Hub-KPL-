@@ -10,7 +10,7 @@ namespace TubesHubGUI
 {
     public partial class SchedulerView : UserControl
     {
-        // Data jadwal kumpul (Table-Driven) Senin - Minggu
+        // Jadwal kumpul kelompok
         private static readonly string[] LokasiKumpul = {
             "Laboratorium KPL", "Kantin Teknik", "Perpustakaan",
             "Discord (Online)", "Cafe", "Libur", "Libur"
@@ -20,37 +20,38 @@ namespace TubesHubGUI
         {
             InitializeComponent();
 
-            // Set default pilihan awal ke hari Senin
+            // Default pilih hari Senin
             var cmb = this.FindControl<ComboBox>("CmbHari");
             if (cmb != null) cmb.SelectedIndex = 0;
         }
 
         private void BtnCek_Click(object sender, RoutedEventArgs e)
         {
-            //  elemen GUI dari file axaml
+            // Ambil elemen dari file axaml
             var cmbHari = this.FindControl<ComboBox>("CmbHari");
             var lblLokasi = this.FindControl<TextBlock>("LblLokasi");
             var lblSuhu = this.FindControl<TextBlock>("LblSuhu");
             var lblSaran = this.FindControl<TextBlock>("LblSaran");
             var pnlSaran = this.FindControl<Border>("PnlSaran");
 
-            // Validasi input kalau belum milih hari
+            // Cek kalau belum pilih hari
             if (cmbHari == null || cmbHari.SelectedIndex == -1)
             {
                 if (lblSaran != null) lblSaran.Text = "[ERROR] Silakan pilih hari terlebih dahulu.";
+                if (pnlSaran != null) pnlSaran.Background = Brushes.Crimson;
                 return;
             }
 
-            // Ambil jadwal lokasi berdasarkan indeks hari yang dipilih
+            // Ambil data berdasarkan indeks hari
             int indeksHari = cmbHari.SelectedIndex;
             string lokasiHariIni = LokasiKumpul[indeksHari];
 
-            // Tampilan loading awal saat tombol diklik
+            // Efek loading awal
             if (lblLokasi != null) lblLokasi.Text = "⏳ Memproses lokasi...";
             if (lblSuhu != null) lblSuhu.Text = "⏳ Mengambil data cuaca...";
             if (pnlSaran != null) pnlSaran.Background = Brushes.Gray;
 
-            // Request data cuaca ke Open-Meteo API
+            // Ambil data cuaca dari API
             try
             {
                 using (HttpClient client = new HttpClient())
@@ -69,27 +70,27 @@ namespace TubesHubGUI
 
                             if (lblSuhu != null) lblSuhu.Text = $"🌡️ Suhu saat ini: {suhu}°C.";
 
-                            // Cek apakah hari yang dipilih  jadwalnya libur
+                            // Cek jika hari libur (Sabtu/Minggu)
                             if (lokasiHariIni == "Libur")
                             {
                                 if (lblLokasi != null) lblLokasi.Text = "✨ Jadwal Hari Ini:\n👉 Libur (Selamat Berakhir Pekan! 🎉)";
                                 if (lblSaran != null) lblSaran.Text = "Saran: Hari ini jadwalnya libur, tidak ada agenda diskusi kelompok.";
                                 if (pnlSaran != null) pnlSaran.Background = Brushes.DarkGreen;
                             }
-                            // Kondisi kalau cuaca panas
+                            // Cek jika cuaca panas
                             else if (suhu > 30)
                             {
                                 if (lblLokasi != null) lblLokasi.Text = $"📍 Lokasi kumpul hari ini: {lokasiHariIni}";
                                 if (lblSaran != null) lblSaran.Text = "Saran: Cuaca cukup panas, sebaiknya kumpul di ruangan ber-AC atau via Discord.";
                                 if (pnlSaran != null) pnlSaran.Background = Brushes.Crimson;
                             }
-                            // Kondisi kalau cuaca sejuk 
+                            // Cek jika cuaca adem
                             else
                             {
                                 if (lblSaran != null) lblSaran.Text = "Saran: Cuaca sangat mendukung untuk diskusi tatap muka!";
                                 if (pnlSaran != null) pnlSaran.Background = Brushes.DarkGreen;
 
-                                // Filter array untuk buang opsi online dan hari libur
+                                // Filter tempat tatap muka saja
                                 List<string> tempatTatapMuka = new List<string>();
                                 foreach (string tempat in LokasiKumpul)
                                 {
@@ -99,12 +100,12 @@ namespace TubesHubGUI
                                     }
                                 }
 
-                                // Menggabunngkan list lokasi jadi satu baris string teks
+                                // Gabungkan list menjadi string teks
                                 string semuaTempatAman = string.Join(", ", tempatTatapMuka);
 
                                 if (lblLokasi != null)
                                 {
-                                    lblLokasi.Text = $" Semua Tempat Tersedia (Tatap Muka):\n {semuaTempatAman}";
+                                    lblLokasi.Text = $"✨ Semua Tempat Tersedia (Tatap Muka):\n👉 {semuaTempatAman}";
                                 }
                             }
                         }
@@ -120,7 +121,7 @@ namespace TubesHubGUI
             }
             catch (Exception ex)
             {
-                // Fallback jika laptop tidak ada koneksi internet / API down
+                // Fallback kalau offline / API gangguan
                 if (lblSuhu != null) lblSuhu.Text = $"[API Error] Koneksi bermasalah: {ex.Message}";
                 if (lblLokasi != null) lblLokasi.Text = $"📍 Lokasi kumpul utama: {lokasiHariIni}";
                 if (lblSaran != null) lblSaran.Text = "Saran: Mode Offline. Ikuti lokasi kumpul utama.";

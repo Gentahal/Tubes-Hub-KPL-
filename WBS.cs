@@ -7,10 +7,10 @@ namespace tubes_hub.Tubes_Hub_KPL_
     public class TaskItem<T>
     {
         public string Category { get; set; }
-        public string Title { get; set; } 
+        public string Title { get; set; }
         public T Detail { get; set; }
         public int Weight { get; set; }
-        public int EstimatedDays { get; set; } 
+        public int EstimatedDays { get; set; }
         public int RelativeMonth { get; set; }
 
         public TaskItem(string category, string title, T detail, int weight, int days, int relMonth)
@@ -29,8 +29,8 @@ namespace tubes_hub.Tubes_Hub_KPL_
         private static readonly Dictionary<string, (int weight, int dayMultiplier)> WBSConfig =
             new Dictionary<string, (int, int)>
         {
-            { "UI", (3, 2) },          
-            { "BACKEND", (8, 3) },     
+            { "UI", (3, 2) },
+            { "BACKEND", (8, 3) },
             { "DATABASE", (7, 2) },
             { "DOKUMENTASI", (2, 3) },
             { "TESTING", (5, 2) }
@@ -47,11 +47,35 @@ namespace tubes_hub.Tubes_Hub_KPL_
 
         public WBSModule(int startMonth) { _startMonthIndex = startMonth - 1; }
 
-        private string GetMonthName(int relativeMonth)
+        // Daftar kategori yang valid, dipakai GUI untuk mengisi ComboBox
+        public static IEnumerable<string> ValidCategories => WBSConfig.Keys;
+
+        public string GetMonthName(int relativeMonth)
         {
             int targetIndex = (_startMonthIndex + (relativeMonth - 1)) % 12;
             return MonthNames[targetIndex];
         }
+
+        // Mengembalikan tugas terkelompok per bulan, dipakai GUI untuk render timeline.
+        public List<(string MonthName, int TotalWeight, List<TaskItem<string>> Tasks)> GetGroupedTasks()
+        {
+            var result = new List<(string, int, List<TaskItem<string>>)>();
+            var groupedTasks = projectTasks.OrderBy(t => t.RelativeMonth).GroupBy(t => t.RelativeMonth);
+
+            foreach (var group in groupedTasks)
+            {
+                result.Add((
+                    GetMonthName(group.Key).ToUpper(),
+                    group.Sum(t => t.Weight),
+                    group.ToList()
+                ));
+            }
+
+            return result;
+        }
+
+        public int MaxWeightPerMonth => MAX_WEIGHT_PER_MONTH;
+
         public void AddTask(string category, string title, string detail)
         {
             var config = WBSConfig[category];
