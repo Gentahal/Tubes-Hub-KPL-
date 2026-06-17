@@ -5,23 +5,23 @@
         Width="900" Height="600"
         WindowStartupLocation="CenterScreen">
 
-    <Grid ColumnDefinitions="220, *">
-        <Border Grid.Column="0" Background="#2D2D30" Padding="15">
-            <StackPanel Spacing="10">
-                <TextBlock Text="TUBES HUB" Foreground="White" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20"/>
-                
-                <Button Content="1. Progress" Click="NavProgress_Click" Width="190" Background="#3E3E42" Foreground="White"/>
-                <Button Content="2. WBS" Click="NavWbs_Click" Width="190" Background="#3E3E42" Foreground="White"/>
-                <Button Content="3. Team Info" Click="NavTeam_Click" Width="190" Background="#3E3E42" Foreground="White"/>
-                <Button Content="4. Scheduler" Click="NavScheduler_Click" Width="190" Background="#3E3E42" Foreground="White"/>
-                
-                <Button Content="5. Finalisasi" Click="NavFinalisasi_Click" Width="190" Background="#0078D7" Foreground="White" FontWeight="Bold"/>
-            </StackPanel>
-        </Border>
+	<Grid ColumnDefinitions="220, *">
+		<Border Grid.Column="0" Background="#2D2D30" Padding="15">
+			<StackPanel Spacing="10">
+				<TextBlock Text="TUBES HUB" Foreground="White" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20"/>
 
-        <Border Grid.Column="1" Background="#F5F5F5">
-            <ContentControl x:Name="MainContentArea" Margin="10"/>
-        </Border>
-    </Grid>
+				<Button Content="1. Progress" Click="NavProgress_Click" Width="190" Background="#3E3E42" Foreground="White"/>
+				<Button Content="2. WBS" Click="NavWbs_Click" Width="190" Background="#3E3E42" Foreground="White"/>
+				<Button Content="3. Team Info" Click="NavTeam_Click" Width="190" Background="#3E3E42" Foreground="White"/>
+				<Button Content="4. Scheduler" Click="NavScheduler_Click" Width="190" Background="#3E3E42" Foreground="White"/>
+
+				<Button Content="5. Finalisasi" Click="NavFinalisasi_Click" Width="190" Background="#0078D7" Foreground="White" FontWeight="Bold"/>
+			</StackPanel>
+		</Border>
+
+		<Border Grid.Column="1" Background="#F5F5F5">
+			<ContentControl x:Name="MainContentArea" Margin="10"/>
+		</Border>
+	</Grid>
 
 </Window>

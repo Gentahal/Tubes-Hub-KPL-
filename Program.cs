@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using TubesHub.ModulProgress;
-using tubes_hub.Tubes_Hub_KPL_; 
+using tubes_hub.Tubes_Hub_KPL_;
 
 namespace TubesHub
 {
@@ -38,7 +38,7 @@ namespace TubesHub
                         SchedulerModule.Jalankan();
                         break;
                     case "5":
-                        Console.WriteLine("Modul Finalisasi sudah dipindahkan ke versi GUI.");
+                        Console.WriteLine("[INFO] Modul Finalisasi belum tersedia di console app ini.");
                         break;
                     case "0":
                         isProgramRunning = false;
@@ -67,7 +67,7 @@ namespace TubesHub
                 Console.WriteLine("4. Update Persentase Progress (DbC)");
                 Console.WriteLine("5. Kembali ke Menu Utama");
                 Console.WriteLine("=========================================");
-                
+
                 if (activeTask != null)
                 {
                     Console.WriteLine($"[Tugas Aktif]: {activeTask.Title} | Status: {activeTask.CurrentState} | Progress: {activeTask.Progress}%");
@@ -97,17 +97,17 @@ namespace TubesHub
                     case "2":
                         Console.Write("Masukkan tanggal deadline (Format: YYYY-MM-DD, contoh: 2026-08-17): ");
                         string inputTanggal = Console.ReadLine() ?? "";
-                        
+
                         if (DateTime.TryParse(inputTanggal, out DateTime deadlineDate))
                         {
                             Console.WriteLine("\nMemeriksa kalender API...");
-                            
+
                             // Performance Testing
                             Stopwatch timer = new Stopwatch();
                             timer.Start();
-                            
+
                             bool isLibur = await HolidayChecker.IsHolidayAsync(deadlineDate);
-                            
+
                             timer.Stop();
                             Console.WriteLine($"[Performance] Waktu respons API: {timer.ElapsedMilliseconds} ms");
                         }
