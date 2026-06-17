@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Text.Json;
+using System.Collections.Generic; // Ditambahkan agar sinkron dengan struktur list filter di GUI
 
 namespace TubesHub
 {
@@ -18,20 +19,18 @@ namespace TubesHub
                 return;
             }
 
-            Console.WriteLine($"Lokasi kumpul: {LokasiKumpul[hari - 1]}");
-
             Console.WriteLine("[API Check] Mengecek cuaca di Telkom University via API eksternal...");
-            CekCuacaAsli();
+            CekCuacaAsli(hari);
         }
 
-        private static void CekCuacaAsli()
+        private static void CekCuacaAsli(int hari)
         {
+            string lokasiHariIni = LokasiKumpul[hari - 1];
             try
             {
                 using (HttpClient client = new HttpClient())
                 {
                     string url = "https://api.open-meteo.com/v1/forecast?latitude=-6.97&longitude=107.63&current_weather=true";
-
                     HttpResponseMessage response = client.GetAsync(url).Result;
 
                     if (response.IsSuccessStatusCode)
@@ -47,22 +46,37 @@ namespace TubesHub
 
                             if (suhu > 30)
                             {
+                                Console.WriteLine($"📍 Lokasi kumpul hari ini: {lokasiHariIni}");
                                 Console.WriteLine("Saran: Cuaca cukup panas, sebaiknya kumpul di ruangan ber-AC atau via Discord.");
                             }
                             else
                             {
                                 Console.WriteLine("Saran: Cuaca sangat mendukung untuk diskusi tatap muka!");
+
+                                // Sinkronisasi Logika: Tampilkan semua lokasi comfy seragam di console
+                                List<string> tempatTatapMuka = new List<string>();
+                                foreach (string tempat in LokasiKumpul)
+                                {
+                                    if (tempat != "Discord (Online)" && tempat != "Libur" && !tempatTatapMuka.Contains(tempat))
+                                    {
+                                        tempatTatapMuka.Add(tempat);
+                                    }
+                                }
+                                string semuaTempatAman = string.Join(", ", tempatTatapMuka);
+                                Console.WriteLine($"✨ Semua Tempat Tersedia (Tatap Muka):\n👉 {semuaTempatAman}");
                             }
                         }
                     }
                     else
                     {
+                        Console.WriteLine($"📍 Lokasi kumpul utama: {lokasiHariIni}");
                         Console.WriteLine("[API Error] Gagal mendapatkan data cuaca.");
                     }
                 }
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"📍 Lokasi kumpul utama: {lokasiHariIni}");
                 Console.WriteLine($"[API Error] Koneksi bermasalah: {ex.Message}");
             }
         }

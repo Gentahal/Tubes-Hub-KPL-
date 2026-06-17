@@ -1,46 +1,59 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="TubesHubGUI.SchedulerView">
+	<ScrollViewer>
+		<Border Background="White" CornerRadius="10" Padding="30" Margin="20" Width="450" HorizontalAlignment="Center" BoxShadow="0 4 15 0 #15000000">
+			<StackPanel Spacing="20">
 
-    <ScrollViewer>
-        <Border Background="White" CornerRadius="10" Padding="30" Margin="20" Width="450" HorizontalAlignment="Center" BoxShadow="0 4 15 0 #15000000">
-            <StackPanel Spacing="20">
-                
-                <TextBlock Text="Modul Scheduler &amp; Cuaca" FontSize="24" FontWeight="Bold" Foreground="#1E1E1E" HorizontalAlignment="Center"/>
-                <TextBlock Text="Koordinasi lokasi tim &amp; pantauan cuaca area kampus." Foreground="#666666" FontSize="14" HorizontalAlignment="Center" Margin="0,-15,0,10"/>
+				<TextBlock Text="Modul Scheduler &amp; Cuaca" FontSize="24" FontWeight="Bold" Foreground="#1E1E1E" HorizontalAlignment="Center"/>
+				<TextBlock Text="Koordinasi lokasi tim &amp; pantauan cuaca area kampus." Foreground="#666666" FontSize="14" HorizontalAlignment="Center" Margin="0,-15,0,10"/>
+				<Separator Background="#E0E0E0" Height="1"/>
 
-                <Separator Background="#E0E0E0" Height="1"/>
+				<StackPanel Spacing="5">
+					<TextBlock Text="Pilih Hari Diskusi:" FontWeight="SemiBold" FontSize="14" Foreground="#333333"/>
+					<ComboBox x:Name="CmbHari" HorizontalAlignment="Stretch" Background="#F8F9FA" Foreground="Black" BorderBrush="#CCCCCC" SelectedIndex="0">
+						<ComboBoxItem Content="Senin"/>
+						<ComboBoxItem Content="Selasa"/>
+						<ComboBoxItem Content="Rabu"/>
+						<ComboBoxItem Content="Kamis"/>
+						<ComboBoxItem Content="Jumat"/>
+						<ComboBoxItem Content="Sabtu"/>
+						<ComboBoxItem Content="Minggu"/>
+					</ComboBox>
+				</StackPanel>
+				<Button x:Name="BtnCek" Content="Cek Jadwal &amp; Cuaca"
+						HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+						Background="#DEFF9A" Foreground="#1E1E1E" FontWeight="Bold" Padding="10" CornerRadius="6" Cursor="Hand" Click="BtnCek_Click">
 
-                <StackPanel Spacing="5">
-                    <TextBlock Text="Pilih Hari Diskusi:" FontWeight="SemiBold" FontSize="14" Foreground="#333333"/>
-                    <ComboBox x:Name="CmbHari" HorizontalAlignment="Stretch" Background="#F8F9FA" Foreground="Black" BorderBrush="#CCCCCC" SelectedIndex="0">
-                        <ComboBoxItem Content="Senin"/>
-                        <ComboBoxItem Content="Selasa"/>
-                        <ComboBoxItem Content="Rabu"/>
-                        <ComboBoxItem Content="Kamis"/>
-                        <ComboBoxItem Content="Jumat"/>
-                        <ComboBoxItem Content="Sabtu"/>
-                        <ComboBoxItem Content="Minggu"/>
-                    </ComboBox>
-                </StackPanel>
+					<!-- Bagian Style khusus untuk mengatur efek Hover kursor -->
+					<Button.Styles>
+						<Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+							<!-- Warna saat kursor diarahkan: sedikit lebih kalem/tidak terlalu terang -->
+							<Setter Property="Background" Value="#CDFA6B" />
+							<Setter Property="Foreground" Value="#1E1E1E" />
+						</Style>
+						<Style Selector="Button:pressed /template/ ContentPresenter#PART_ContentPresenter">
+							<!-- Warna saat tombol ditekan/diklik klik -->
+							<Setter Property="Background" Value="#BDED5A" />
+							<Setter Property="Foreground" Value="#1E1E1E" />
+						</Style>
+					</Button.Styles>
 
-                <Button x:Name="BtnCek" Content="Cek Jadwal &amp; Cuaca"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-                        Background="#DEFF9A" Foreground="#1E1E1E" FontWeight="Bold" Padding="10" CornerRadius="6" Cursor="Hand" Click="BtnCek_Click"/>
+				</Button>
 
-                <Border Background="#F8F9FA" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8" Padding="15">
-                    <StackPanel Spacing="10">
-                        <TextBlock Text="Hasil Pengecekan:" FontWeight="Bold" Foreground="#333333"/>
-                        <TextBlock x:Name="LblLokasi" Text="Lokasi Kumpul Utama: -" Foreground="#4A4A4A" FontSize="15" FontWeight="SemiBold" TextWrapping="Wrap"/>
-                        <TextBlock x:Name="LblSuhu" Text="Suhu Saat Ini: -" Foreground="#005A9E" FontSize="15" TextWrapping="Wrap"/>
-                    </StackPanel>
-                </Border>
+				<Border Background="#F8F9FA" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8" Padding="15">
+					<StackPanel Spacing="10">
+						<TextBlock Text="Hasil Pengecekan:" FontWeight="Bold" Foreground="#333333"/>
+						<TextBlock x:Name="LblLokasi" Text="Lokasi Kumpul Utama: -" Foreground="#4A4A4A" FontSize="15" FontWeight="SemiBold" TextWrapping="Wrap"/>
+						<TextBlock x:Name="LblSuhu" Text="Suhu Saat Ini: -" Foreground="#005A9E" FontSize="15" TextWrapping="Wrap"/>
+					</StackPanel>
+				</Border>
 
-                <Border x:Name="PnlSaran" Background="#333333" Padding="15" CornerRadius="8">
-                    <TextBlock x:Name="LblSaran" Text="Saran: Pilih hari dan klik cek." TextWrapping="Wrap" Foreground="White" FontWeight="Medium" HorizontalAlignment="Center"/>
-                </Border>
-                
-            </StackPanel>
-        </Border>
-    </ScrollViewer>
+				<Border x:Name="PnlSaran" Background="#333333" Padding="15" CornerRadius="8">
+					<TextBlock x:Name="LblSaran" Text="Saran: Pilih hari dan klik cek." TextWrapping="Wrap" Foreground="White" FontWeight="Medium" HorizontalAlignment="Center"/>
+				</Border>
+
+			</StackPanel>
+		</Border>
+	</ScrollViewer>
 </UserControl>
