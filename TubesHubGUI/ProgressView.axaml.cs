@@ -1,22 +1,42 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using System;
-using System.Diagnostics;
+using System.Collections.Generic; // Ditambahkan untuk menggunakan List
 using TubesHub.ModulProgress; 
 
 namespace TubesHubGUI
 {
     public partial class ProgressView : UserControl
     {
-        // Tambah '?' biar warning CS8618 hilang
         private TaskItem? activeTask;
+        
+        // List baru untuk menyimpan history semua tugas yang dibuat
+        private List<TaskItem> taskHistory = new List<TaskItem>();
 
         public ProgressView()
         {
             InitializeComponent();
         }
 
-        // 1. Aksi buat tugas baru (Menerapkan status awal ToDo)
+        // Fungsi Helper buat bikin log terminal numpuk & ada jamnya
+        private void LogToTerminal(string message)
+        {
+            string time = DateTime.Now.ToString("HH:mm:ss");
+            string newLog = $"[{time}] {message}\n";
+
+            // Kalau ini log pertama, timpa teks default "Sistem siap..."
+            if (OutputText.Text != null && OutputText.Text.Contains("> Sistem siap."))
+            {
+                OutputText.Text = newLog;
+            }
+            else
+            {
+                // Kalau udah ada isinya, tambahin ke baris bawahnya
+                OutputText.Text += newLog;
+            }
+        }
+
+        // 1. Aksi buat tugas baru
         private void CreateTask_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -24,50 +44,38 @@ namespace TubesHubGUI
                 string name = TaskNameInput.Text ?? "";
                 if (string.IsNullOrWhiteSpace(name))
                 {
-                    OutputText.Text = "[DbC Error] Nama tugas tidak boleh kosong!";
+                    LogToTerminal("[DbC Error] Nama tugas tidak boleh kosong!");
                     return;
                 }
                 
                 activeTask = new TaskItem(name);
-                OutputText.Text = $"[Sukses] Tugas '{activeTask.Title}' dibuat. Status Awal: {activeTask.CurrentState}";
+                taskHistory.Add(activeTask); // Masukkan tugas baru ke dalam history
+                
+                LogToTerminal($"[Sukses] Tugas '{activeTask.Title}' dibuat. Status Awal: {activeTask.CurrentState}");
             }
             catch (Exception ex)
             {
-                OutputText.Text = $"[Error] {ex.Message}";
+                LogToTerminal($"[Error] {ex.Message}");
             }
         }
 
-        // 2. Aksi cek API Kalender Libur Nasional
-        private async void CheckApi_Click(object sender, RoutedEventArgs e)
+        // 2. Aksi Set Tanggal Pengerjaan
+        private void SetDate_Click(object sender, RoutedEventArgs e)
         {
-            string inputDate = DateInput.Text ?? "";
-            if (DateTime.TryParse(inputDate, out DateTime deadlineDate))
+            if (activeTask == null)
             {
-                OutputText.Text = "Menghubungi Web API Nager.Date...";
-                Stopwatch sw = Stopwatch.StartNew();
+                LogToTerminal("[Peringatan] Buat tugas terlebih dahulu!");
+                return;
+            }
 
-                try
-                {
-                    bool isLibur = await HolidayChecker.IsHolidayAsync(deadlineDate);
-                    sw.Stop();
-
-                    if (isLibur)
-                    {
-                        OutputText.Text = $"[Peringatan API] Tanggal {inputDate} adalah hari libur nasional!\nRespons API: {sw.ElapsedMilliseconds} ms";
-                    }
-                    else
-                    {
-                        OutputText.Text = $"[Aman] Tanggal {inputDate} bukan hari libur.\nRespons API: {sw.ElapsedMilliseconds} ms";
-                    }
-                }
-                catch (Exception ex)
-                {
-                    OutputText.Text = $"[API Error] Gagal mengambil data: {ex.Message}";
-                }
+            if (TaskDatePicker.SelectedDate.HasValue)
+            {
+                DateTime selectedDate = TaskDatePicker.SelectedDate.Value;
+                LogToTerminal($"[Sukses] Tanggal pengerjaan '{activeTask.Title}' diatur ke: {selectedDate.ToString("dd MMM yyyy")}");
             }
             else
             {
-                OutputText.Text = "[Error] Format tanggal salah! Gunakan YYYY-MM-DD.";
+                LogToTerminal("[Peringatan] Harap pilih tanggal pengerjaan terlebih dahulu!");
             }
         }
 
@@ -76,7 +84,7 @@ namespace TubesHubGUI
         {
             if (activeTask == null)
             {
-                OutputText.Text = "[Peringatan] Buat tugas terlebih dahulu!";
+                LogToTerminal("[Peringatan] Buat tugas terlebih dahulu!");
                 return;
             }
 
@@ -90,23 +98,21 @@ namespace TubesHubGUI
                     _ => TaskState.ToDo
                 };
 
-                // Gaskeun Panggil mesin automata dari backend
                 activeTask.TransitionTo(targetState);
-                OutputText.Text = $"[Automata Sukses] Status berhasil diubah menjadi: {activeTask.CurrentState}";
+                LogToTerminal($"[Automata Sukses] Status berhasil diubah menjadi: {activeTask.CurrentState}");
             }
             catch (Exception ex)
             {
-                // Menangkap InvalidOperationException kalau statusnya melompat
-                OutputText.Text = $"[Ditolak Automata] {ex.Message}";
+                LogToTerminal($"[Ditolak Automata] {ex.Message}");
             }
         }
 
-        // 4. Aksi Update Progress (Validasi DbC) - INI YANG TADI BIKIN ERROR
+        // 4. Aksi Update Progress (Validasi DbC)
         private void UpdateProgress_Click(object sender, RoutedEventArgs e)
         {
             if (activeTask == null)
             {
-                OutputText.Text = "[Peringatan] Buat tugas terlebih dahulu!";
+                LogToTerminal("[Peringatan] Buat tugas terlebih dahulu!");
                 return;
             }
 
@@ -115,17 +121,43 @@ namespace TubesHubGUI
                 try
                 {
                     activeTask.UpdateProgress(persentase);
-                    OutputText.Text = $"[DbC Sukses] Progress tugas diperbarui menjadi {persentase}%.";
+                    LogToTerminal($"[DbC Sukses] Progress tugas diperbarui menjadi {persentase}%.");
                 }
                 catch (Exception ex)
                 {
-                    OutputText.Text = $"[Ditolak DbC] {ex.Message}";
+                    LogToTerminal($"[Ditolak DbC] {ex.Message}");
                 }
             }
             else
             {
-                OutputText.Text = "[Error] Harap masukkan angka yang valid (0-100).";
+                LogToTerminal("[Error] Harap masukkan angka yang valid (0-100).");
             }
+        }
+
+        // 5. Aksi Lihat History Tugas
+        private void ViewHistory_Click(object sender, RoutedEventArgs e)
+        {
+            if (taskHistory.Count == 0)
+            {
+                LogToTerminal("[-] History kosong. Belum ada tugas yang dibuat.");
+                return;
+            }
+
+            LogToTerminal("=== HISTORY & LIST TUGAS ===");
+            int aktif = 0;
+            int selesai = 0;
+
+            foreach (var task in taskHistory)
+            {
+                string status = task.CurrentState.ToString();
+                if (status == "Done") selesai++;
+                else aktif++;
+
+                LogToTerminal($"- {task.Title} | Status: {status} | Progress: {task.Progress}%");
+            }
+            
+            LogToTerminal($"[Rekap] Total Tugas: {taskHistory.Count} | Aktif: {aktif} | Selesai: {selesai}");
+            LogToTerminal("============================");
         }
     }
 }

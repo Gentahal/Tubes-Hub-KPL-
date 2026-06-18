@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <Compile Remove="TubesHubGUI\**" />
+    <Compile Remove="Tubes_Hub_WBSGUI\**" />
     <Content Remove="TubesHubGUI\**" />
     <EmbeddedResource Remove="TubesHubGUI\**" />
     <None Remove="TubesHubGUI\**" />
