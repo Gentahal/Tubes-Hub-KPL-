@@ -133,11 +133,11 @@ namespace TubesHub
 
                         try
                         {
-                            TaskState targetState = inputStatus switch
+                            TubesHub.ModulProgress.TaskState targetState = inputStatus switch
                             {
-                                "0" => TaskState.ToDo,
-                                "1" => TaskState.InProgress,
-                                "2" => TaskState.Done,
+                                "0" => TubesHub.ModulProgress.TaskState.ToDo,
+                                "1" => TubesHub.ModulProgress.TaskState.InProgress,
+                                "2" => TubesHub.ModulProgress.TaskState.Done,
                                 _ => throw new ArgumentException("Pilihan status tidak valid.")
                             };
 

@@ -1,0 +1,21 @@
+{
+  "ProjectStartMonth": 1,
+  "TotalTasks": 1,
+  "TeamMembers": [],
+  "Tasks": [
+    {
+      "Id": "c81fe46e-19bd-4a9e-bc58-42122306c19b",
+      "Category": "UI",
+      "Title": "UI UX",
+      "Detail": "Okeokeoe",
+      "Weight": 3,
+      "BobotLevel": "Ringan",
+      "EstimatedDays": 6,
+      "RelativeMonth": 1,
+      "CurrentState": 1,
+      "Progress": 10,
+      "AssignedTo": "",
+      "DueDate": "2026-06-11T00:00:00"
+    }
+  ]
+}

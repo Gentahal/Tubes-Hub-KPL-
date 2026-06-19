@@ -1,56 +1,83 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="TubesHubGUI.WBSView">
-    <Grid Margin="10" RowDefinitions="Auto,Auto,*,Auto">
+    <ScrollViewer>
+        <StackPanel Margin="20" Spacing="15">
 
-        <TextBlock Grid.Row="0" Text="WORK BREAKDOWN STRUCTURE (WBS)"
-                   FontSize="20" FontWeight="Bold" Margin="0,0,0,10" Foreground="Black"/>
+            <TextBlock Text="WORK BREAKDOWN STRUCTURE (WBS)"
+                       FontSize="22" FontWeight="Bold" Foreground="#1E1E1E"/>
+            <TextBlock Text="Perencanaan tugas proyek menggunakan teknik Table-Driven Construction." 
+                       Foreground="#666666" FontSize="13" Margin="0,-10,0,0"/>
 
-        <!-- Input Area -->
-        <Border Grid.Row="1" Background="White" CornerRadius="4" Padding="15" Margin="0,0,0,10"
-                BoxShadow="0 1 3 0 #20000000">
-            <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*,Auto,*">
+            <!-- Inisialisasi Proyek -->
+            <Border Background="White" CornerRadius="8" Padding="20" BoxShadow="0 2 6 0 #18000000">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Inisialisasi Proyek" FontWeight="Bold" FontSize="16" Foreground="#333333"/>
 
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="Bulan Mulai Proyek (1-12):" VerticalAlignment="Center" Margin="0,5,10,5" Foreground="#333333"/>
-                <StackPanel Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal" Spacing="10">
-                    <TextBox x:Name="TxtStartMonth" Width="80" Margin="0,5"/>
-                    <Button x:Name="BtnInitProject" Content="Inisialisasi Proyek" Margin="0,5" Padding="10,4"
-                            Background="#0078D7" Foreground="White" Click="BtnInitProject_Click"/>
+                    <Grid ColumnDefinitions="Auto, *, Auto">
+                        <TextBlock Grid.Column="0" Text="Bulan Mulai:" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="#555"/>
+                        <ComboBox x:Name="CmbStartMonth" Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,0,15,0" SelectedIndex="0">
+                            <ComboBoxItem Content="1 - Januari"/>
+                            <ComboBoxItem Content="2 - Februari"/>
+                            <ComboBoxItem Content="3 - Maret"/>
+                            <ComboBoxItem Content="4 - April"/>
+                            <ComboBoxItem Content="5 - Mei"/>
+                            <ComboBoxItem Content="6 - Juni"/>
+                            <ComboBoxItem Content="7 - Juli"/>
+                            <ComboBoxItem Content="8 - Agustus"/>
+                            <ComboBoxItem Content="9 - September"/>
+                            <ComboBoxItem Content="10 - Oktober"/>
+                            <ComboBoxItem Content="11 - November"/>
+                            <ComboBoxItem Content="12 - Desember"/>
+                        </ComboBox>
+                        <Button x:Name="BtnInitProject" Grid.Column="2" Content="Inisialisasi Proyek"
+                                Padding="15,8" Background="#0078D7" Foreground="White" FontWeight="Bold"
+                                CornerRadius="6" Cursor="Hand" Click="BtnInitProject_Click"/>
+                    </Grid>
                 </StackPanel>
+            </Border>
 
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="Kategori:" VerticalAlignment="Center" Margin="0,5,10,5" Foreground="#333333"/>
-                <ComboBox x:Name="CmbCategory" Grid.Row="1" Grid.Column="1" Margin="0,5,10,5" IsEnabled="False" HorizontalAlignment="Stretch">
-                    <ComboBoxItem Content="UI"/>
-                    <ComboBoxItem Content="BACKEND"/>
-                    <ComboBoxItem Content="DATABASE"/>
-                    <ComboBoxItem Content="DOKUMENTASI"/>
-                    <ComboBoxItem Content="TESTING"/>
-                </ComboBox>
+            <!-- Input Tugas Baru -->
+            <Border x:Name="PnlInputTask" Background="White" CornerRadius="8" Padding="20" BoxShadow="0 2 6 0 #18000000" IsEnabled="False" Opacity="0.5">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Tambah Tugas Baru" FontWeight="Bold" FontSize="16" Foreground="#333333"/>
 
-                <TextBlock Grid.Row="1" Grid.Column="2" Text="Judul:" VerticalAlignment="Center" Margin="0,5,10,5" Foreground="#333333"/>
-                <TextBox x:Name="TxtTitle" Grid.Row="1" Grid.Column="3" Margin="0,5" IsEnabled="False"/>
+                    <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto, *, Auto, *">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Kategori:" VerticalAlignment="Center" Margin="0,0,10,5" Foreground="#555"/>
+                        <ComboBox x:Name="CmbCategory" Grid.Row="0" Grid.Column="1" Margin="0,0,15,5" HorizontalAlignment="Stretch">
+                            <ComboBoxItem Content="UI"/>
+                            <ComboBoxItem Content="BACKEND"/>
+                            <ComboBoxItem Content="DATABASE"/>
+                            <ComboBoxItem Content="DOKUMENTASI"/>
+                            <ComboBoxItem Content="TESTING"/>
+                        </ComboBox>
 
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="Deskripsi:" VerticalAlignment="Center" Margin="0,5,10,5" Foreground="#333333"/>
-                <TextBox x:Name="TxtDesc" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,5" IsEnabled="False"/>
+                        <TextBlock Grid.Row="0" Grid.Column="2" Text="Judul:" VerticalAlignment="Center" Margin="0,0,10,5" Foreground="#555"/>
+                        <TextBox x:Name="TxtTitle" Grid.Row="0" Grid.Column="3" Margin="0,0,0,5"/>
 
-                <Button x:Name="BtnAddTask" Grid.Row="3" Grid.Column="3" Content="Tambah Tugas"
-                        HorizontalAlignment="Right" Padding="10,4" Margin="0,10,0,0"
-                        Background="#0078D7" Foreground="White"
-                        IsEnabled="False" Click="BtnAddTask_Click"/>
-            </Grid>
-        </Border>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Deskripsi:" VerticalAlignment="Center" Margin="0,0,10,5" Foreground="#555"/>
+                        <TextBox x:Name="TxtDesc" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,0,0,5"/>
 
-        <!-- Timeline Display -->
-        <Border Grid.Row="2" Background="White" CornerRadius="4" Padding="15" BoxShadow="0 1 3 0 #20000000">
-            <DockPanel>
-                <TextBlock DockPanel.Dock="Top" Text="Timeline Perencanaan Proyek" FontWeight="Bold" Margin="0,0,0,5" Foreground="Black"/>
-                <ScrollViewer>
-                    <ItemsControl x:Name="TimelinePanel"/>
-                </ScrollViewer>
-            </DockPanel>
-        </Border>
+                        <Button x:Name="BtnAddTask" Grid.Row="2" Grid.Column="3" Content="Tambah Tugas"
+                                HorizontalAlignment="Right" Padding="15,8" Margin="0,8,0,0"
+                                Background="#28A745" Foreground="White" FontWeight="Bold"
+                                CornerRadius="6" Cursor="Hand" Click="BtnAddTask_Click"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
 
-        <!-- Status -->
-        <TextBlock x:Name="TxtStatus" Grid.Row="3" Margin="0,10,0,0" Foreground="DarkGreen" FontStyle="Italic"/>
-    </Grid>
+            <!-- Timeline Display -->
+            <Border Background="White" CornerRadius="8" Padding="20" BoxShadow="0 2 6 0 #18000000">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top" Text="Timeline Perencanaan Proyek" FontWeight="Bold" FontSize="16" Margin="0,0,0,10" Foreground="#333333"/>
+                    <ScrollViewer MaxHeight="350">
+                        <ItemsControl x:Name="TimelinePanel"/>
+                    </ScrollViewer>
+                </DockPanel>
+            </Border>
+
+            <!-- Status -->
+            <TextBlock x:Name="TxtStatus" Margin="0,5,0,0" Foreground="DarkGreen" FontStyle="Italic" FontSize="13"/>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

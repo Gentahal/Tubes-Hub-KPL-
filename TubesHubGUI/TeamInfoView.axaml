@@ -1,26 +1,22 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="TubesHub.TeamInfoView">
+             x:Class="TubesHubGUI.TeamInfoView">
 
-	<Border Margin="20" CornerRadius="12" Background="White" BoxShadow="0 4 10 #10000000">
-		<StackPanel Margin="30" Spacing="20">
+    <ScrollViewer>
+        <StackPanel Margin="20" Spacing="15">
 
-			<StackPanel Spacing="5">
-				<TextBlock Text="Modul Informasi Tim" FontSize="28" FontWeight="Bold" Foreground="#1A1A1A"/>
-				<TextBlock Text="Daftar anggota kelompok dan pembagian tugas Tubes Hub." FontSize="14" Foreground="#666666"/>
-				<Border Height="1" Background="#E0E0E0" Margin="0,10,0,10"/>
-			</StackPanel>
+            <TextBlock Text="MONITORING TIM" FontSize="22" FontWeight="Bold" Foreground="#1E1E1E"/>
+            <TextBlock Text="Data anggota dimuat dari file team.json (Runtime Config). Informasi tugas aktif diambil dari WBS." 
+                       Foreground="#666666" FontSize="13" Margin="0,-10,0,0"/>
 
-			<TextBlock Text="Anggota Tim Aktif:" FontSize="16" FontWeight="SemiBold" Foreground="#333333"/>
+            <!-- Status bar -->
+            <Border x:Name="StatusBar" Background="#E8F5E9" CornerRadius="6" Padding="12,8">
+                <TextBlock x:Name="LblStatus" Text="Memuat data..." Foreground="#2E7D32" FontWeight="Medium" FontSize="13"/>
+            </Border>
 
-			<ListBox x:Name="LstAnggota" Height="200" CornerRadius="6" BorderBrush="#CCCCCC" BorderThickness="1">
-			</ListBox>
+            <!-- Team members cards -->
+            <StackPanel x:Name="PnlMembers" Spacing="10"/>
 
-			<TextBlock Text="Status Terminal:" FontSize="14" FontWeight="SemiBold" Foreground="#333333" Margin="0,10,0,0"/>
-			<Border x:Name="BorderStatus" Background="Gray" CornerRadius="6" Padding="15,10">
-				<TextBlock x:Name="LblStatus" Text="Menunggu data..." Foreground="White" FontWeight="Medium" TextWrapping="Wrap"/>
-			</Border>
-
-		</StackPanel>
-	</Border>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

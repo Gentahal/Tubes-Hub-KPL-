@@ -9,31 +9,48 @@
             <StackPanel Spacing="20">
                 
                 <TextBlock Text="Modul Progress &amp; API" FontSize="28" FontWeight="Bold" Foreground="#1E1E1E" />
-                <TextBlock Text="Check progresi tugas modul anda di sini." Foreground="#666666" FontSize="14" Margin="0,-15,0,10"/>
+                <TextBlock Text="Pilih tugas dari WBS dan perbarui status pengerjaannya." Foreground="#666666" FontSize="14" Margin="0,-15,0,10"/>
 
                 <Separator Background="#E0E0E0" Height="1"/>
 
-                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*, 160">
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*, 160">
 
-                    <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Nama Tugas:" FontWeight="SemiBold" FontSize="14" Foreground="#333333" Margin="0,0,0,8"/>
-                    <TextBox Grid.Row="1" Grid.Column="0" x:Name="TaskNameInput" PlaceholderText="Masukkan nama tugas baru..." Margin="0,0,15,20" CornerRadius="6" Height="40" VerticalContentAlignment="Center" BorderBrush="#CCCCCC"/>
-                    <Button Grid.Row="1" Grid.Column="1" Content="Buat Tugas" Click="CreateTask_Click" Background="#0078D7" Foreground="White" FontWeight="Bold" CornerRadius="6" Cursor="Hand" HorizontalAlignment="Stretch" Height="40" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,20"/>
+                    <!-- Pilih Tugas -->
+                    <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Pilih Tugas:" FontWeight="SemiBold" FontSize="14" Foreground="#333333" Margin="0,0,0,8"/>
+                    <ComboBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="CmbTask" SelectionChanged="CmbTask_SelectionChanged" HorizontalAlignment="Stretch" Margin="0,0,0,20" CornerRadius="6" Height="40" Background="White" Foreground="Black">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:CompileBindings="False">
+                                <TextBlock Text="{Binding Title}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
 
-                    <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="Tanggal Pengerjaan:" FontWeight="SemiBold" FontSize="14" Foreground="#333333" Margin="0,0,0,8"/>
-                    <CalendarDatePicker Grid.Row="3" Grid.Column="0" x:Name="TaskDatePicker" HorizontalAlignment="Stretch" Margin="0,0,15,20" CornerRadius="6" Height="40" BorderBrush="#CCCCCC" Background="White"/>
-                    <Button Grid.Row="3" Grid.Column="1" Content="Set Tanggal" Click="SetDate_Click" Background="#28A745" Foreground="White" FontWeight="Bold" CornerRadius="6" Cursor="Hand" HorizontalAlignment="Stretch" Height="40" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,20"/>
+                    <!-- Assigned To -->
+                    <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="Assign Ke:" FontWeight="SemiBold" FontSize="14" Foreground="#333333" Margin="0,0,0,8"/>
+                    <ComboBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" x:Name="CmbMembers" HorizontalAlignment="Stretch" Margin="0,0,0,20" CornerRadius="6" Height="40" Background="White" Foreground="Black">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:CompileBindings="False">
+                                <TextBlock Text="{Binding Nama}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
 
-                    <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Text="Ubah Status (Automata):" FontWeight="SemiBold" FontSize="14" Foreground="#333333" Margin="0,0,0,8"/>
-                    <ComboBox Grid.Row="5" Grid.Column="0" x:Name="StatusCombo" SelectedIndex="0" HorizontalAlignment="Stretch" Margin="0,0,15,20" CornerRadius="6" Height="40" VerticalContentAlignment="Center" BorderBrush="#CCCCCC" Background="White" Foreground="Black">
+                    <!-- Tanggal Pengerjaan -->
+                    <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Text="Tanggal Pengerjaan (Deadline):" FontWeight="SemiBold" FontSize="14" Foreground="#333333" Margin="0,0,0,8"/>
+                    <CalendarDatePicker Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" x:Name="TaskDatePicker" HorizontalAlignment="Stretch" Margin="0,0,0,20" CornerRadius="6" Height="40" BorderBrush="#CCCCCC" Background="White"/>
+
+                    <!-- Status -->
+                    <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Text="Status Tugas:" FontWeight="SemiBold" FontSize="14" Foreground="#333333" Margin="0,0,0,8"/>
+                    <ComboBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" x:Name="StatusCombo" SelectedIndex="0" HorizontalAlignment="Stretch" Margin="0,0,0,20" CornerRadius="6" Height="40" Background="White" Foreground="Black">
                         <ComboBoxItem>To Do</ComboBoxItem>
                         <ComboBoxItem>In Progress</ComboBoxItem>
                         <ComboBoxItem>Done</ComboBoxItem>
                     </ComboBox>
-                    <Button Grid.Row="5" Grid.Column="1" Content="Update Status" Click="ChangeStatus_Click" Background="#FFC107" Foreground="Black" FontWeight="Bold" CornerRadius="6" Cursor="Hand" HorizontalAlignment="Stretch" Height="40" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,20"/>
 
-                    <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Text="Update Progress (%):" FontWeight="SemiBold" FontSize="14" Foreground="#333333" Margin="0,0,0,8"/>
-                    <TextBox Grid.Row="7" Grid.Column="0" x:Name="ProgressInput" PlaceholderText="0 - 100" Margin="0,0,15,0" CornerRadius="6" Height="40" VerticalContentAlignment="Center" BorderBrush="#CCCCCC"/>
-                    <Button Grid.Row="7" Grid.Column="1" Content="Update Progress" Click="UpdateProgress_Click" Background="#17A2B8" Foreground="White" FontWeight="Bold" CornerRadius="6" Cursor="Hand" HorizontalAlignment="Stretch" Height="40" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                    <!-- Progress -->
+                    <TextBlock Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" Text="Update Progress (%):" FontWeight="SemiBold" FontSize="14" Foreground="#333333" Margin="0,0,0,8"/>
+                    <TextBox Grid.Row="9" Grid.Column="0" x:Name="ProgressInput" PlaceholderText="0 - 100" Margin="0,0,15,0" CornerRadius="6" Height="40" VerticalContentAlignment="Center" BorderBrush="#CCCCCC"/>
+                    <Button Grid.Row="9" Grid.Column="1" Content="Simpan Perubahan" Click="SaveProgress_Click" Background="#0078D7" Foreground="White" FontWeight="Bold" CornerRadius="6" Cursor="Hand" HorizontalAlignment="Stretch" Height="40" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                 </Grid>
 
                 <Separator Background="#E0E0E0" Height="1" Margin="0,10,0,5"/>
@@ -64,7 +81,7 @@
                             </ScrollViewer>
                         </Border>
 
-                        <Button Content="Lihat History &amp; List Tugas" Click="ViewHistory_Click" 
+                        <Button Content="Lihat Rekap Tugas" Click="ViewHistory_Click" 
                         Background="#343A40" Foreground="White" FontWeight="Bold" 
                         CornerRadius="6" Cursor="Hand" HorizontalAlignment="Right" Padding="20,10"/>
                     </StackPanel>

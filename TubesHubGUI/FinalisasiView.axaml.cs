@@ -2,7 +2,8 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using System;
-using TubesHubGUI;
+using System.Linq;
+using TubesHub;
 
 namespace TubesHubGUI
 {
@@ -11,50 +12,70 @@ namespace TubesHubGUI
         public FinalisasiView()
         {
             InitializeComponent();
-            LoadStatus();
+            LoadDashboardData();
         }
 
-        private void LoadStatus()
+        private void LoadDashboardData()
         {
+            var tasks = ProjectManager.Tasks;
+            int totalTasks = tasks.Count;
+            int doneTasks = tasks.Count(t => t.CurrentState == TaskState.Done);
+            
+            double averageProgress = 0;
+            if (totalTasks > 0)
+            {
+                averageProgress = tasks.Average(t => t.Progress);
+            }
+
+            TxtTotalTasks.Text = totalTasks.ToString();
+            TxtTasksDone.Text = doneTasks.ToString();
+            
+            ProjectProgressBar.Value = averageProgress;
+            TxtProgressPercentage.Text = $"{Math.Round(averageProgress, 1)}% Selesai";
+
+            UpdateDocStatusUI();
+        }
+
+        private void UpdateDocStatusUI()
+        {
+            TxtDocStatusInfo.Text = $"Status saat ini: {ProjectManager.DocAutomata.CurrentState}";
+            CmbDocStatus.SelectedIndex = (int)ProjectManager.DocAutomata.CurrentState;
+        }
+
+        private void OnUpdateDocStatusClicked(object sender, RoutedEventArgs e)
+        {
+            if (CmbDocStatus.SelectedIndex == -1) return;
+
+            DocumentState targetState = (DocumentState)CmbDocStatus.SelectedIndex;
+
             try
             {
-                var status = FinalisasiModule.GetLaporanStatus();
-                string displayText = "";
-                foreach (var item in status)
-                {
-                    displayText += $"{item.Key}: {item.Value}\n";
-                }
-                StatusTextBlock.Text = displayText;
+                ProjectManager.DocAutomata.TransitionTo(targetState);
+                UpdateDocStatusUI();
+                PesanTextBlock.Foreground = Brushes.Green;
+                PesanTextBlock.Text = $"[BERHASIL] Status dokumen diperbarui menjadi {targetState}.";
             }
             catch (Exception ex)
             {
-                StatusTextBlock.Text = "Gagal memuat data.";
-                PesanTextBlock.Text = ex.Message;
+                // Revert combobox to current state
+                CmbDocStatus.SelectedIndex = (int)ProjectManager.DocAutomata.CurrentState;
                 PesanTextBlock.Foreground = Brushes.Red;
+                PesanTextBlock.Text = ex.Message;
             }
         }
 
-        private void OnSimpanClicked(object sender, RoutedEventArgs e)
+        private void OnGenerateClicked(object sender, RoutedEventArgs e)
         {
             try
             {
-                var selectedBab = (BabComboBox.SelectedItem as ComboBoxItem)?.Content?.ToString();
-                var selectedStatus = (StatusComboBox.SelectedItem as ComboBoxItem)?.Content?.ToString();
-
-                if (selectedBab != null && selectedStatus != null)
-                {
-                    FinalisasiModule.UbahStatusDokumen(selectedBab, selectedStatus);
-
-                    PesanTextBlock.Foreground = Brushes.Green;
-                    PesanTextBlock.Text = $"[INFO] Status {selectedBab} berhasil diubah menjadi {selectedStatus}!";
-
-                    LoadStatus();
-                }
+                ProjectManager.SaveReport();
+                PesanTextBlock.Foreground = Brushes.Green;
+                PesanTextBlock.Text = "[BERHASIL] Laporan akhir telah diekspor ke file 'laporan_akhir.json' di root direktori.";
             }
             catch (Exception ex)
             {
                 PesanTextBlock.Foreground = Brushes.Red;
-                PesanTextBlock.Text = ex.Message;
+                PesanTextBlock.Text = $"[GAGAL] {ex.Message}";
             }
         }
     }

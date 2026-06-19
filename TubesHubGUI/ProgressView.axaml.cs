@@ -1,22 +1,184 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Media;
 using System;
-using System.Diagnostics;
-using System.Collections.Generic; // Ditambahkan untuk menggunakan List
-using TubesHub.ModulProgress; 
+using System.Linq;
+using TubesHub;
 
 namespace TubesHubGUI
 {
     public partial class ProgressView : UserControl
     {
-        // Tambah '?' biar warning CS8618 hilang
-        private TaskItem? activeTask;
-
-        private List<TaskItem> taskHistory = new List<TaskItem>();
+        private UnifiedTask? activeTask;
 
         public ProgressView()
         {
             InitializeComponent();
+            LoadData();
+        }
+
+        private void LoadData()
+        {
+            CmbTask.ItemsSource = null;
+            CmbTask.ItemsSource = ProjectManager.Tasks;
+
+            if (ProjectManager.Members.Count == 0)
+            {
+                ProjectManager.LoadTeamMembers();
+            }
+            CmbMembers.ItemsSource = null;
+            CmbMembers.ItemsSource = ProjectManager.Members;
+
+            // Show helpful message if no tasks or project not initialized
+            if (!ProjectManager.IsInitialized)
+            {
+                LogToTerminal("[Info] Proyek belum diinisialisasi. Buka modul WBS terlebih dahulu untuk memulai.");
+            }
+            else if (ProjectManager.Tasks.Count == 0)
+            {
+                LogToTerminal("[Info] Belum ada tugas. Tambahkan tugas di modul WBS terlebih dahulu.");
+            }
+            else
+            {
+                LogToTerminal($"[Info] {ProjectManager.Tasks.Count} tugas ditemukan. Pilih tugas dari dropdown untuk mulai mengelola.");
+            }
+        }
+
+        private void CmbTask_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CmbTask.SelectedItem is UnifiedTask task)
+            {
+                activeTask = task;
+                
+                // Update UI fields
+                if (!string.IsNullOrEmpty(task.AssignedTo))
+                {
+                    var member = ProjectManager.Members.FirstOrDefault(m => m.Nama == task.AssignedTo);
+                    CmbMembers.SelectedItem = member;
+                }
+                else
+                {
+                    CmbMembers.SelectedIndex = -1;
+                }
+
+                TaskDatePicker.SelectedDate = task.DueDate;
+                
+                StatusCombo.SelectedIndex = task.CurrentState switch
+                {
+                    TaskState.ToDo => 0,
+                    TaskState.InProgress => 1,
+                    TaskState.Done => 2,
+                    _ => 0
+                };
+
+                ProgressInput.Text = task.Progress.ToString();
+                LogToTerminal($"[Info] Memilih tugas: '{task.Title}' [{task.CurrentState}] Progress: {task.Progress}%");
+            }
+        }
+
+        private void SaveProgress_Click(object sender, RoutedEventArgs e)
+        {
+            if (activeTask == null)
+            {
+                LogToTerminal("[Peringatan] Pilih tugas terlebih dahulu dari dropdown!");
+                return;
+            }
+
+            try
+            {
+                // Set Assignee
+                if (CmbMembers.SelectedItem is TeamMember member)
+                {
+                    activeTask.AssignedTo = member.Nama;
+                }
+
+                // Set Date
+                if (TaskDatePicker.SelectedDate.HasValue)
+                {
+                    activeTask.DueDate = TaskDatePicker.SelectedDate.Value;
+                }
+
+                // Set Progress first (so we can check before status transition)
+                int persentase = 0;
+                if (int.TryParse(ProgressInput.Text, out persentase))
+                {
+                    // If status is being changed to InProgress and progress > 0, do transition first
+                    TaskState targetState = StatusCombo.SelectedIndex switch
+                    {
+                        0 => TaskState.ToDo,
+                        1 => TaskState.InProgress,
+                        2 => TaskState.Done,
+                        _ => TaskState.ToDo
+                    };
+
+                    // Perform state transition first if needed
+                    if (activeTask.CurrentState != targetState)
+                    {
+                        activeTask.TransitionTo(targetState);
+                    }
+
+                    // Then update progress  
+                    activeTask.UpdateProgress(persentase);
+
+                    // Auto-sync UI if status changed due to 100% progress
+                    StatusCombo.SelectedIndex = activeTask.CurrentState switch
+                    {
+                        TaskState.ToDo => 0,
+                        TaskState.InProgress => 1,
+                        TaskState.Done => 2,
+                        _ => 0
+                    };
+                }
+                else
+                {
+                    LogToTerminal("[DbC Error] Progress harus berupa angka valid (0-100). Defensive Programming menolak input ini.");
+                    return;
+                }
+
+                string assignedInfo = string.IsNullOrEmpty(activeTask.AssignedTo) ? "Belum diassign" : activeTask.AssignedTo;
+                LogToTerminal($"[Sukses] Tugas '{activeTask.Title}' diperbarui → Status: {activeTask.CurrentState}, Progress: {activeTask.Progress}%, PIC: {assignedInfo}");
+            }
+            catch (Exception ex)
+            {
+                LogToTerminal($"[Ditolak - KPL Constraints] {ex.Message}");
+                // Revert UI to actual state
+                StatusCombo.SelectedIndex = activeTask.CurrentState switch
+                {
+                    TaskState.ToDo => 0,
+                    TaskState.InProgress => 1,
+                    TaskState.Done => 2,
+                    _ => 0
+                };
+                ProgressInput.Text = activeTask.Progress.ToString();
+            }
+        }
+
+        private void ViewHistory_Click(object sender, RoutedEventArgs e)
+        {
+            var tasks = ProjectManager.Tasks;
+            if (tasks.Count == 0)
+            {
+                LogToTerminal("[-] Belum ada tugas di dalam WBS.");
+                return;
+            }
+
+            LogToTerminal("=== REKAP TUGAS PROYEK ===");
+            int aktif = 0;
+            int selesai = 0;
+
+            foreach (var task in tasks)
+            {
+                string status = task.CurrentState.ToString();
+                if (task.CurrentState == TaskState.Done) selesai++;
+                else aktif++;
+
+                string assignStr = string.IsNullOrEmpty(task.AssignedTo) ? "Belum diassign" : task.AssignedTo;
+                LogToTerminal($"- {task.Title} | PIC: {assignStr} | Status: {status} | Progress: {task.Progress}%");
+            }
+            
+            double avgProgress = tasks.Average(t => t.Progress);
+            LogToTerminal($"[Rekap] Total: {tasks.Count} | Aktif: {aktif} | Selesai: {selesai} | Rata-rata Progress: {Math.Round(avgProgress, 1)}%");
+            LogToTerminal("============================");
         }
 
         private void LogToTerminal(string message)
@@ -24,140 +186,14 @@ namespace TubesHubGUI
             string time = DateTime.Now.ToString("HH:mm:ss");
             string newLog = $"[{time}] {message}\n";
 
-            // Kalau ini log pertama, timpa teks default "Sistem siap..."
             if (OutputText.Text != null && OutputText.Text.Contains("> Sistem siap."))
             {
                 OutputText.Text = newLog;
             }
             else
             {
-                // Kalau udah ada isinya, tambahin ke baris bawahnya
                 OutputText.Text += newLog;
             }
-        }
-
-        // 1. Aksi buat tugas baru (Menerapkan status awal ToDo)
-        private void CreateTask_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                string name = TaskNameInput.Text ?? "";
-                if (string.IsNullOrWhiteSpace(name))
-                {
-                    LogToTerminal("[DbC Error] Nama tugas tidak boleh kosong!");
-                    return;
-                }
-                
-                activeTask = new TaskItem(name);
-                taskHistory.Add(activeTask); // Masukkan tugas baru ke dalam history
-                
-                LogToTerminal($"[Sukses] Tugas '{activeTask.Title}' dibuat. Status Awal: {activeTask.CurrentState}");
-            }
-            catch (Exception ex)
-            {
-                LogToTerminal($"[Error] {ex.Message}");
-            }
-        }
-
-        private void SetDate_Click(object sender, RoutedEventArgs e)
-        {
-            if (activeTask == null)
-            {
-                LogToTerminal("[Peringatan] Buat tugas terlebih dahulu!");
-                return;
-            }
-
-            if (TaskDatePicker.SelectedDate.HasValue)
-            {
-                DateTime selectedDate = TaskDatePicker.SelectedDate.Value;
-                LogToTerminal($"[Sukses] Tanggal pengerjaan '{activeTask.Title}' diatur ke: {selectedDate.ToString("dd MMM yyyy")}");
-            }
-            else
-            {
-                LogToTerminal("[Peringatan] Harap pilih tanggal pengerjaan terlebih dahulu!");
-            }
-        }
-
-        // 3. Aksi Ubah Status (Validasi Automata)
-        private void ChangeStatus_Click(object sender, RoutedEventArgs e)
-        {
-            if (activeTask == null)
-            {
-                LogToTerminal("[Peringatan] Buat tugas terlebih dahulu!");
-                return;
-            }
-
-            try
-            {
-                TaskState targetState = StatusCombo.SelectedIndex switch
-                {
-                    0 => TaskState.ToDo,
-                    1 => TaskState.InProgress,
-                    2 => TaskState.Done,
-                    _ => TaskState.ToDo
-                };
-
-                // Gaskeun Panggil mesin automata dari backend
-                activeTask.TransitionTo(targetState);
-                LogToTerminal($"[Automata Sukses] Status berhasil diubah menjadi: {activeTask.CurrentState}");
-            }
-            catch (Exception ex)
-            {
-                // Menangkap InvalidOperationException kalau statusnya melompat
-                LogToTerminal($"[Ditolak Automata] {ex.Message}");
-            }
-        }
-
-        // 4. Aksi Update Progress (Validasi DbC) - INI YANG TADI BIKIN ERROR
-        private void UpdateProgress_Click(object sender, RoutedEventArgs e)
-        {
-            if (activeTask == null)
-            {
-                LogToTerminal("[Peringatan] Buat tugas terlebih dahulu!");
-                return;
-            }
-
-            if (int.TryParse(ProgressInput.Text, out int persentase))
-            {
-                try
-                {
-                    activeTask.UpdateProgress(persentase);
-                    LogToTerminal($"[DbC Sukses] Progress tugas diperbarui menjadi {persentase}%.");
-                }
-                catch (Exception ex)
-                {
-                    LogToTerminal($"[Ditolak DbC] {ex.Message}");
-                }
-            }
-            else
-            {
-                LogToTerminal("[Error] Harap masukkan angka yang valid (0-100).");
-            }
-        }
-
-        private void ViewHistory_Click(object sender, RoutedEventArgs e)
-        {
-            if (taskHistory.Count == 0)
-            {
-                LogToTerminal("[-] History kosong. Belum ada tugas yang dibuat.");
-                return;
-            }
-
-            LogToTerminal("=== HISTORY & LIST TUGAS ===");
-            int aktif = 0;
-            int selesai = 0;
-
-            foreach (var task in taskHistory)
-            {
-                string status = task.CurrentState.ToString();
-                if (status == "Done") selesai++;
-                else aktif++;
-
-                LogToTerminal($"- {task.Title} | Status: {status} | Progress: {task.Progress}%");
-            }
-            
-            LogToTerminal($"[Rekap] Total Tugas: {taskHistory.Count} | Aktif: {aktif} | Selesai: {selesai}");
-            LogToTerminal("============================");
         }
     }
 }
