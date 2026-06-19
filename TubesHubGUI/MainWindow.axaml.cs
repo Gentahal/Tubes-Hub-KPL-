@@ -24,7 +24,7 @@ namespace TubesHubGUI
 
         private void NavProgress_Click(object sender, RoutedEventArgs e)
         {
-            MainContentArea.Content = new TextBlock { Text = "Halaman Progress sedang dikerjakan...", FontSize = 18, Margin = new Avalonia.Thickness(20) };
+            MainContentArea.Content = new ProgressView();
         }
 
         private void NavTeam_Click(object sender, RoutedEventArgs e)

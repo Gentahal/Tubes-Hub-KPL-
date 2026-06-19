@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using TubesHub.ModulProgress;
@@ -53,7 +53,7 @@ namespace TubesHub
 
         static async Task TestModulProgress()
         {
-            TaskItem activeTask = null;
+            TaskItem? activeTask = null;
             bool isModulProgressRunning = true;
 
             while (isModulProgressRunning)
@@ -226,7 +226,7 @@ namespace TubesHub
                     Console.Write("Pilih (1-5): ");
 
                     string catChoice = Console.ReadLine() ?? "";
-                    string selectedCategory = catChoice switch
+                    string? selectedCategory = catChoice switch
                     {
                         "1" => "UI",
                         "2" => "BACKEND",

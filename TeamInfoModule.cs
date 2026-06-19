@@ -23,8 +23,8 @@ namespace TubesHub
                 Console.WriteLine("=== Daftar Tim Tubes Hub ===");
                 foreach (JsonElement element in document.RootElement.EnumerateArray())
                 {
-                    string nama = element.GetProperty("Nama").GetString();
-                    string role = element.GetProperty("Role").GetString();
+                    string? nama = element.GetProperty("Nama").GetString();
+                    string? role = element.GetProperty("Role").GetString();
                     Console.WriteLine($"- {nama} (Tugas: {role})");
                 }
             }

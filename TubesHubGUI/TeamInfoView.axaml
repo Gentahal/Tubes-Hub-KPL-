@@ -1,9 +1,9 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="TubesHub.TeamInfoView">
 
 	<Border Margin="20" CornerRadius="12" Background="White" BoxShadow="0 4 10 #10000000">
-		<StackPanel Padding="30" Spacing="20">
+		<StackPanel Margin="30" Spacing="20">
 
 			<StackPanel Spacing="5">
 				<TextBlock Text="Modul Informasi Tim" FontSize="28" FontWeight="Bold" Foreground="#1A1A1A"/>

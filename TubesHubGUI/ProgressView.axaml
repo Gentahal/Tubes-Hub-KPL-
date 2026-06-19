@@ -19,9 +19,9 @@
                     <TextBox Grid.Row="1" Grid.Column="0" x:Name="TaskNameInput" PlaceholderText="Masukkan nama tugas baru..." Margin="0,0,15,20" CornerRadius="6" Height="40" VerticalContentAlignment="Center" BorderBrush="#CCCCCC"/>
                     <Button Grid.Row="1" Grid.Column="1" Content="Buat Tugas" Click="CreateTask_Click" Background="#0078D7" Foreground="White" FontWeight="Bold" CornerRadius="6" Cursor="Hand" HorizontalAlignment="Stretch" Height="40" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,20"/>
 
-                    <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="Deadline (Format: YYYY-MM-DD):" FontWeight="SemiBold" FontSize="14" Foreground="#333333" Margin="0,0,0,8"/>
-                    <TextBox Grid.Row="3" Grid.Column="0" x:Name="DateInput" PlaceholderText="Contoh: 2026-08-17" Margin="0,0,15,20" CornerRadius="6" Height="40" VerticalContentAlignment="Center" BorderBrush="#CCCCCC"/>
-                    <Button Grid.Row="3" Grid.Column="1" Content="Cek Libur (API)" Click="CheckApi_Click" Background="#28A745" Foreground="White" FontWeight="Bold" CornerRadius="6" Cursor="Hand" HorizontalAlignment="Stretch" Height="40" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,20"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="Tanggal Pengerjaan:" FontWeight="SemiBold" FontSize="14" Foreground="#333333" Margin="0,0,0,8"/>
+                    <CalendarDatePicker Grid.Row="3" Grid.Column="0" x:Name="TaskDatePicker" HorizontalAlignment="Stretch" Margin="0,0,15,20" CornerRadius="6" Height="40" BorderBrush="#CCCCCC" Background="White"/>
+                    <Button Grid.Row="3" Grid.Column="1" Content="Set Tanggal" Click="SetDate_Click" Background="#28A745" Foreground="White" FontWeight="Bold" CornerRadius="6" Cursor="Hand" HorizontalAlignment="Stretch" Height="40" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,20"/>
 
                     <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Text="Ubah Status (Automata):" FontWeight="SemiBold" FontSize="14" Foreground="#333333" Margin="0,0,0,8"/>
                     <ComboBox Grid.Row="5" Grid.Column="0" x:Name="StatusCombo" SelectedIndex="0" HorizontalAlignment="Stretch" Margin="0,0,15,20" CornerRadius="6" Height="40" VerticalContentAlignment="Center" BorderBrush="#CCCCCC" Background="White" Foreground="Black">
@@ -59,8 +59,14 @@
                         </Border>
                         
                         <Border Padding="15">
-                            <TextBlock x:Name="OutputText" Text="> Sistem siap. Menunggu perintah selanjutnya..." Foreground="#4AF626" FontFamily="Courier New" TextWrapping="Wrap" FontSize="14" LineHeight="22"/>
+                            <ScrollViewer MaxHeight="200" VerticalScrollBarVisibility="Auto">
+                                <TextBlock x:Name="OutputText" Text="> Sistem siap. Menunggu perintah selanjutnya...&#x0a;" Foreground="#4AF626" FontFamily="Courier New" TextWrapping="Wrap" FontSize="14" LineHeight="22"/>
+                            </ScrollViewer>
                         </Border>
+
+                        <Button Content="Lihat History &amp; List Tugas" Click="ViewHistory_Click" 
+                        Background="#343A40" Foreground="White" FontWeight="Bold" 
+                        CornerRadius="6" Cursor="Hand" HorizontalAlignment="Right" Padding="20,10"/>
                     </StackPanel>
                 </Border>
             </StackPanel>
