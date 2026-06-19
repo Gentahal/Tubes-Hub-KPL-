@@ -4,12 +4,13 @@ using Avalonia.Media;
 using System;
 using System.Net.Http;
 using System.Text.Json;
+using System.Collections.Generic;
 
 namespace TubesHubGUI
 {
     public partial class SchedulerView : UserControl
     {
-        // Menyinkronkan array LokasiKumpul persis seperti di backend konsol kalian
+        // Jadwal kumpul kelompok
         private static readonly string[] LokasiKumpul = {
             "Laboratorium KPL", "Kantin Teknik", "Perpustakaan",
             "Discord (Online)", "Cafe", "Libur", "Libur"
@@ -17,37 +18,40 @@ namespace TubesHubGUI
 
         public SchedulerView()
         {
-            // Menggunakan inisialisasi standar bawaan Avalonia compiler
             InitializeComponent();
 
-            // Set default pilihan ComboBox ke hari Senin (indeks 0) saat program dibuka
+            // Default pilih hari Senin
             var cmb = this.FindControl<ComboBox>("CmbHari");
             if (cmb != null) cmb.SelectedIndex = 0;
         }
 
         private void BtnCek_Click(object sender, RoutedEventArgs e)
         {
-            // Mencari komponen secara dinamis untuk menghindari 'ghost error' di teks editor
+            // Ambil elemen dari file axaml
             var cmbHari = this.FindControl<ComboBox>("CmbHari");
             var lblLokasi = this.FindControl<TextBlock>("LblLokasi");
             var lblSuhu = this.FindControl<TextBlock>("LblSuhu");
             var lblSaran = this.FindControl<TextBlock>("LblSaran");
             var pnlSaran = this.FindControl<Border>("PnlSaran");
 
-            // Validasi Input (Defensive UX menggantikan int.TryParse di konsol)
+            // Cek kalau belum pilih hari
             if (cmbHari == null || cmbHari.SelectedIndex == -1)
             {
                 if (lblSaran != null) lblSaran.Text = "[ERROR] Silakan pilih hari terlebih dahulu.";
+                if (pnlSaran != null) pnlSaran.Background = Brushes.Crimson;
                 return;
             }
 
-            //  Ekstrak data menggunakan Table-Driven berdasarkan pilihan ComboBox
+            // Ambil data berdasarkan indeks hari
             int indeksHari = cmbHari.SelectedIndex;
-            string lokasi = LokasiKumpul[indeksHari];
+            string lokasiHariIni = LokasiKumpul[indeksHari];
 
-            if (lblLokasi != null) lblLokasi.Text = $"Lokasi kumpul: {lokasi}";
+            // Efek loading awal
+            if (lblLokasi != null) lblLokasi.Text = "⏳ Memproses lokasi...";
+            if (lblSuhu != null) lblSuhu.Text = "⏳ Mengambil data cuaca...";
+            if (pnlSaran != null) pnlSaran.Background = Brushes.Gray;
 
-            //Mengecek cuaca di Telkom University via API eksternal (Open-Meteo)
+            // Ambil data cuaca dari API
             try
             {
                 using (HttpClient client = new HttpClient())
@@ -64,24 +68,52 @@ namespace TubesHubGUI
                             JsonElement currentWeather = document.RootElement.GetProperty("current_weather");
                             double suhu = currentWeather.GetProperty("temperature").GetDouble();
 
-                            if (lblSuhu != null) lblSuhu.Text = $"[API Berhasil] Suhu saat ini: {suhu}°C.";
+                            if (lblSuhu != null) lblSuhu.Text = $"🌡️ Suhu saat ini: {suhu}°C.";
 
-                            // Logika Keputusan (Sesuai dengan teks backend konsol kelompokmu)
-                            if (suhu > 30)
+                            // Cek jika hari libur (Sabtu/Minggu)
+                            if (lokasiHariIni == "Libur")
                             {
-                                if (lblSaran != null) lblSaran.Text = "Saran: Cuaca cukup panas, sebaiknya kumpul di ruangan ber-AC atau via Discord.";
-                                if (pnlSaran != null) pnlSaran.Background = Brushes.Crimson; // Merah jika panas
+                                if (lblLokasi != null) lblLokasi.Text = "✨ Jadwal Hari Ini:\n👉 Libur (Selamat Berakhir Pekan! 🎉)";
+                                if (lblSaran != null) lblSaran.Text = "Saran: Hari ini jadwalnya libur, tidak ada agenda diskusi kelompok.";
+                                if (pnlSaran != null) pnlSaran.Background = Brushes.DarkGreen;
                             }
+                            // Cek jika cuaca panas
+                            else if (suhu > 30)
+                            {
+                                if (lblLokasi != null) lblLokasi.Text = $"📍 Lokasi kumpul hari ini: {lokasiHariIni}";
+                                if (lblSaran != null) lblSaran.Text = "Saran: Cuaca cukup panas, sebaiknya kumpul di ruangan ber-AC atau via Discord.";
+                                if (pnlSaran != null) pnlSaran.Background = Brushes.Crimson;
+                            }
+                            // Cek jika cuaca adem
                             else
                             {
                                 if (lblSaran != null) lblSaran.Text = "Saran: Cuaca sangat mendukung untuk diskusi tatap muka!";
-                                if (pnlSaran != null) pnlSaran.Background = Brushes.DarkGreen; // Hijau jika sejuk
+                                if (pnlSaran != null) pnlSaran.Background = Brushes.DarkGreen;
+
+                                // Filter tempat tatap muka saja
+                                List<string> tempatTatapMuka = new List<string>();
+                                foreach (string tempat in LokasiKumpul)
+                                {
+                                    if (tempat != "Discord (Online)" && tempat != "Libur" && !tempatTatapMuka.Contains(tempat))
+                                    {
+                                        tempatTatapMuka.Add(tempat);
+                                    }
+                                }
+
+                                // Gabungkan list menjadi string teks
+                                string semuaTempatAman = string.Join(", ", tempatTatapMuka);
+
+                                if (lblLokasi != null)
+                                {
+                                    lblLokasi.Text = $"✨ Semua Tempat Tersedia (Tatap Muka):\n👉 {semuaTempatAman}";
+                                }
                             }
                         }
                     }
                     else
                     {
                         if (lblSuhu != null) lblSuhu.Text = "[API Error] Gagal mendapatkan data cuaca.";
+                        if (lblLokasi != null) lblLokasi.Text = $"📍 Lokasi kumpul utama: {lokasiHariIni}";
                         if (lblSaran != null) lblSaran.Text = "Saran: Tetap ikuti lokasi kumpul utama.";
                         if (pnlSaran != null) pnlSaran.Background = Brushes.Gray;
                     }
@@ -89,8 +121,9 @@ namespace TubesHubGUI
             }
             catch (Exception ex)
             {
-                // Menangkap exception koneksi bermasalah persis seperti blok catch di konsol kalian
+                // Fallback kalau offline / API gangguan
                 if (lblSuhu != null) lblSuhu.Text = $"[API Error] Koneksi bermasalah: {ex.Message}";
+                if (lblLokasi != null) lblLokasi.Text = $"📍 Lokasi kumpul utama: {lokasiHariIni}";
                 if (lblSaran != null) lblSaran.Text = "Saran: Mode Offline. Ikuti lokasi kumpul utama.";
                 if (pnlSaran != null) pnlSaran.Background = Brushes.Gray;
             }
