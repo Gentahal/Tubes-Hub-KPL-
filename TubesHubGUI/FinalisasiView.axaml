@@ -37,8 +37,17 @@
 
                 <Border Background="#F8F9FA" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8" Padding="20">
                     <StackPanel Spacing="10">
-                        <TextBlock Text="Status Dokumen Laporan (Automata)" FontSize="16" FontWeight="SemiBold" Foreground="#333333"/>
-                        <Grid ColumnDefinitions="*, Auto" Margin="0,5,0,0">
+                        <TextBlock Text="Status Dokumen Laporan per Tugas (Automata)" FontSize="16" FontWeight="SemiBold" Foreground="#333333"/>
+                        <TextBlock Text="Pilih tugas yang sudah selesai (Done) untuk dikelola dokumen laporannya:" FontSize="13" Foreground="#666666"/>
+                        <ComboBox x:Name="CmbTaskFinalisasi" SelectionChanged="CmbTaskFinalisasi_SelectionChanged" HorizontalAlignment="Stretch" Margin="0,5,0,10">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:CompileBindings="False">
+                                    <TextBlock Text="{Binding Title}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        
+                        <Grid ColumnDefinitions="*, Auto" Margin="0,0,0,0">
                             <ComboBox x:Name="CmbDocStatus" Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,10,0">
                                 <ComboBoxItem Content="Draft"/>
                                 <ComboBoxItem Content="Revisi"/>

@@ -39,7 +39,7 @@ namespace TubesHub
         public static List<UnifiedTask> Tasks { get; private set; } = new List<UnifiedTask>();
         public static List<TeamMember> Members { get; private set; } = new List<TeamMember>();
 
-        public static int StartMonth { get; private set; } = 1;
+        public static DateTime StartDate { get; private set; } = DateTime.Now;
         public static bool IsInitialized { get; private set; } = false;
 
         public static DocumentAutomata DocAutomata { get; } = new DocumentAutomata();
@@ -56,20 +56,16 @@ namespace TubesHub
 
         public const int MaxWeightPerMonth = 40;
 
-        private static readonly string[] MonthNames = {
-            "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-        };
+
 
         public static string GetMonthName(int relativeMonth)
         {
-            int targetIndex = ((StartMonth - 1) + (relativeMonth - 1)) % 12;
-            return MonthNames[targetIndex];
+            return StartDate.AddMonths(relativeMonth - 1).ToString("MMMM");
         }
 
-        public static void InitializeProject(int startMonth)
+        public static void InitializeProject(DateTime startDate)
         {
-            StartMonth = startMonth;
+            StartDate = startDate;
             IsInitialized = true;
             Tasks.Clear();
             LoadTeamMembers();
@@ -133,13 +129,22 @@ namespace TubesHub
             }
         }
 
+        public static void RemoveTaskWBS(Guid taskId)
+        {
+            var task = Tasks.FirstOrDefault(t => t.Id == taskId);
+            if (task != null)
+            {
+                Tasks.Remove(task);
+            }
+        }
+
         public static void SaveReport()
         {
             try
             {
                 var report = new
                 {
-                    ProjectStartMonth = StartMonth,
+                    ProjectStartDate = StartDate.ToString("yyyy-MM-dd"),
                     TotalTasks = Tasks.Count,
                     TeamMembers = Members,
                     Tasks = Tasks

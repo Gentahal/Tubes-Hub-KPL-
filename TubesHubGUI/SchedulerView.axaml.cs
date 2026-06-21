@@ -19,36 +19,44 @@ namespace TubesHubGUI
         public SchedulerView()
         {
             InitializeComponent();
-            var cmb = this.FindControl<ComboBox>("CmbHari");
-            if (cmb != null) cmb.SelectedIndex = 0;
+            var dp = this.FindControl<CalendarDatePicker>("DatePickerJadwal");
+            if (dp != null) dp.SelectedDate = DateTime.Today;
         }
 
         private void BtnCek_Click(object sender, RoutedEventArgs e)
         {
-            var cmbHari = this.FindControl<ComboBox>("CmbHari");
+            var datePicker = this.FindControl<CalendarDatePicker>("DatePickerJadwal");
             var lblJudulHasil = this.FindControl<TextBlock>("LblJudulHasil");
             var lblLokasi = this.FindControl<TextBlock>("LblLokasi");
             var lblSuhu = this.FindControl<TextBlock>("LblSuhu");
             var lblSaran = this.FindControl<TextBlock>("LblSaran");
             var pnlSaran = this.FindControl<Border>("PnlSaran");
 
-            if (cmbHari == null || cmbHari.SelectedIndex == -1)
+            if (datePicker == null || !datePicker.SelectedDate.HasValue)
             {
-                if (lblSaran != null) lblSaran.Text = "[ERROR] Silakan pilih hari terlebih dahulu.";
+                if (lblSaran != null) lblSaran.Text = "[ERROR] Silakan pilih tanggal terlebih dahulu.";
                 if (pnlSaran != null) pnlSaran.Background = Brushes.Crimson;
                 return;
             }
 
-            if (lblJudulHasil != null)
+            DateTime selectedDate = datePicker.SelectedDate.Value;
+
+            if (selectedDate.Date < DateTime.Today)
             {
-                var selectedItem = cmbHari.SelectedItem as ComboBoxItem;
-                string namaHari = (selectedItem != null && selectedItem.Content != null)
-                    ? selectedItem.Content.ToString() ?? "Dipilih"
-                    : "Dipilih";
-                lblJudulHasil.Text = $"Hasil Pengecekan Hari {namaHari}:";
+                if (lblSaran != null) lblSaran.Text = "[ERROR] Tanggal tidak boleh di masa lampau.";
+                if (pnlSaran != null) pnlSaran.Background = Brushes.Crimson;
+                return;
             }
 
-            int indeksHari = cmbHari.SelectedIndex;
+            // Calculate Day Index (0 = Senin, 1 = Selasa ... 6 = Minggu)
+            int indeksHari = ((int)selectedDate.DayOfWeek + 6) % 7; 
+            string namaHari = selectedDate.ToString("dddd, dd MMMM yyyy", new System.Globalization.CultureInfo("id-ID"));
+
+            if (lblJudulHasil != null)
+            {
+                lblJudulHasil.Text = $"Hasil Pengecekan Tanggal {namaHari}:";
+            }
+
             string lokasiHariIni = LokasiKumpul[indeksHari];
 
             if (lblLokasi != null) lblLokasi.Text = "Memproses lokasi...";

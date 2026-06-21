@@ -9,16 +9,8 @@
 				<Separator Background="#E0E0E0" Height="1"/>
 
 				<StackPanel Spacing="5">
-					<TextBlock Text="Pilih Hari Diskusi:" FontWeight="SemiBold" FontSize="14" Foreground="#333333"/>
-					<ComboBox x:Name="CmbHari" HorizontalAlignment="Stretch" Background="#F8F9FA" Foreground="Black" BorderBrush="#CCCCCC" SelectedIndex="0">
-						<ComboBoxItem Content="Senin"/>
-						<ComboBoxItem Content="Selasa"/>
-						<ComboBoxItem Content="Rabu"/>
-						<ComboBoxItem Content="Kamis"/>
-						<ComboBoxItem Content="Jumat"/>
-						<ComboBoxItem Content="Sabtu"/>
-						<ComboBoxItem Content="Minggu"/>
-					</ComboBox>
+					<TextBlock Text="Pilih Tanggal Diskusi:" FontWeight="SemiBold" FontSize="14" Foreground="#333333"/>
+					<CalendarDatePicker x:Name="DatePickerJadwal" HorizontalAlignment="Stretch" Background="#F8F9FA" BorderBrush="#CCCCCC"/>
 				</StackPanel>
 
 				<Button x:Name="BtnCek" Content="Cek Jadwal &amp; Cuaca"

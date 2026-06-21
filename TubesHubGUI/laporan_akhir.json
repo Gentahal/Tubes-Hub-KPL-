@@ -1,21 +1,48 @@
 {
-  "ProjectStartMonth": 1,
+  "ProjectStartDate": "2026-06-23",
   "TotalTasks": 1,
-  "TeamMembers": [],
+  "TeamMembers": [
+    {
+      "Nim": "103022430001",
+      "Nama": "Ahmad Rajulu Alrasyid",
+      "Role": "WBS"
+    },
+    {
+      "Nim": "103022400029",
+      "Nama": "Aufa Azzaky Arief",
+      "Role": "Progress"
+    },
+    {
+      "Nim": "103022400036",
+      "Nama": "Yosua Aji Wibowo",
+      "Role": "Team Info"
+    },
+    {
+      "Nim": "103022400024",
+      "Nama": "Faras Aulia Prake",
+      "Role": "Scheduler"
+    },
+    {
+      "Nim": "103022400067",
+      "Nama": "Genta Halilintar",
+      "Role": "Finalisasi"
+    }
+  ],
   "Tasks": [
     {
-      "Id": "c81fe46e-19bd-4a9e-bc58-42122306c19b",
-      "Category": "UI",
-      "Title": "UI UX",
-      "Detail": "Okeokeoe",
-      "Weight": 3,
-      "BobotLevel": "Ringan",
-      "EstimatedDays": 6,
+      "Id": "d28d01e7-eb77-418d-a5bc-c7fb7eeb6f69",
+      "Category": "BACKEND",
+      "Title": "sdada",
+      "Detail": "dsaad",
+      "Weight": 8,
+      "BobotLevel": "Berat",
+      "EstimatedDays": 24,
       "RelativeMonth": 1,
-      "CurrentState": 1,
-      "Progress": 10,
-      "AssignedTo": "",
-      "DueDate": "2026-06-11T00:00:00"
+      "CurrentState": 2,
+      "Progress": 100,
+      "DocState": 2,
+      "AssignedTo": "Aufa Azzaky Arief",
+      "DueDate": "2026-06-23T00:00:00"
     }
   ]
 }

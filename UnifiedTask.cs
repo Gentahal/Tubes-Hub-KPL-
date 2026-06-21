@@ -30,31 +30,30 @@ namespace TubesHub
 
         public TaskState CurrentState { get; set; } = TaskState.ToDo;
         public int Progress { get; set; } = 0;
+        public DocumentState DocState { get; set; } = DocumentState.Draft;
         
         public string AssignedTo { get; set; } = string.Empty;
         public DateTime? DueDate { get; set; }
 
         public void TransitionTo(TaskState nextState)
         {
-            if (CurrentState == TaskState.ToDo && nextState == TaskState.InProgress)
+            if (CurrentState == nextState)
             {
-                CurrentState = nextState;
+                return; // do nothing
             }
-            else if (CurrentState == TaskState.InProgress && nextState == TaskState.Done)
+
+            if (nextState == TaskState.Done && Progress < 100)
             {
-                if (Progress < 100)
-                    throw new InvalidOperationException($"[Automata Error] Tugas '{Title}' belum mencapai 100%, tidak bisa diubah ke Done.");
-                
-                CurrentState = nextState;
+                throw new InvalidOperationException($"[Automata Error] Tugas '{Title}' belum mencapai 100%, tidak bisa diubah ke Done.");
             }
-            else if (CurrentState == nextState)
+
+            if (nextState == TaskState.ToDo)
             {
-                // do nothing
+                Progress = 0; // Force progress to 0 if reverted to To Do
             }
-            else
-            {
-                throw new InvalidOperationException($"[Automata Error] Transisi dari {CurrentState} ke {nextState} tidak diperbolehkan (Invalid State).");
-            }
+
+            // Allow any valid logical transition for flexible editing
+            CurrentState = nextState;
         }
 
         public void UpdateProgress(int newProgress)
@@ -62,15 +61,20 @@ namespace TubesHub
             if (newProgress < 0 || newProgress > 100)
                 throw new ArgumentOutOfRangeException(nameof(newProgress), "[DbC Error] Progress harus di antara 0 hingga 100 (Defensive Programming).");
 
-            if (CurrentState == TaskState.ToDo && newProgress > 0)
-                throw new InvalidOperationException("[Automata Error] Ubah status ke 'In Progress' terlebih dahulu sebelum mengisi progress.");
-
             Progress = newProgress;
             
-            // Auto complete if 100
-            if (Progress == 100 && CurrentState == TaskState.InProgress)
+            // Auto transition state based on progress
+            if (Progress > 0 && Progress < 100 && CurrentState == TaskState.ToDo)
+            {
+                CurrentState = TaskState.InProgress;
+            }
+            else if (Progress == 100 && CurrentState != TaskState.Done)
             {
                 CurrentState = TaskState.Done;
+            }
+            else if (Progress == 0 && CurrentState != TaskState.ToDo)
+            {
+                CurrentState = TaskState.ToDo;
             }
         }
     }

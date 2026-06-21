@@ -102,7 +102,6 @@ namespace TubesHubGUI
                 int persentase = 0;
                 if (int.TryParse(ProgressInput.Text, out persentase))
                 {
-                    // If status is being changed to InProgress and progress > 0, do transition first
                     TaskState targetState = StatusCombo.SelectedIndex switch
                     {
                         0 => TaskState.ToDo,
@@ -111,16 +110,17 @@ namespace TubesHubGUI
                         _ => TaskState.ToDo
                     };
 
-                    // Perform state transition first if needed
+                    // First update the state requested by the user manually, if different from current
                     if (activeTask.CurrentState != targetState)
                     {
                         activeTask.TransitionTo(targetState);
                     }
 
-                    // Then update progress  
+                    // Then update progress. Note that UpdateProgress will auto-adjust state if needed
+                    // For example, if user sets Progress = 100, it automatically becomes Done.
                     activeTask.UpdateProgress(persentase);
 
-                    // Auto-sync UI if status changed due to 100% progress
+                    // Sync UI back with actual task state
                     StatusCombo.SelectedIndex = activeTask.CurrentState switch
                     {
                         TaskState.ToDo => 0,
@@ -128,6 +128,7 @@ namespace TubesHubGUI
                         TaskState.Done => 2,
                         _ => 0
                     };
+                    ProgressInput.Text = activeTask.Progress.ToString();
                 }
                 else
                 {

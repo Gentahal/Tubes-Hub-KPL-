@@ -16,20 +16,7 @@
 
                     <Grid ColumnDefinitions="Auto, *, Auto">
                         <TextBlock Grid.Column="0" Text="Bulan Mulai:" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="#555"/>
-                        <ComboBox x:Name="CmbStartMonth" Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,0,15,0" SelectedIndex="0">
-                            <ComboBoxItem Content="1 - Januari"/>
-                            <ComboBoxItem Content="2 - Februari"/>
-                            <ComboBoxItem Content="3 - Maret"/>
-                            <ComboBoxItem Content="4 - April"/>
-                            <ComboBoxItem Content="5 - Mei"/>
-                            <ComboBoxItem Content="6 - Juni"/>
-                            <ComboBoxItem Content="7 - Juli"/>
-                            <ComboBoxItem Content="8 - Agustus"/>
-                            <ComboBoxItem Content="9 - September"/>
-                            <ComboBoxItem Content="10 - Oktober"/>
-                            <ComboBoxItem Content="11 - November"/>
-                            <ComboBoxItem Content="12 - Desember"/>
-                        </ComboBox>
+                        <CalendarDatePicker x:Name="DatePickerStart" Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,0,15,0" />
                         <Button x:Name="BtnInitProject" Grid.Column="2" Content="Inisialisasi Proyek"
                                 Padding="15,8" Background="#0078D7" Foreground="White" FontWeight="Bold"
                                 CornerRadius="6" Cursor="Hand" Click="BtnInitProject_Click"/>
@@ -66,12 +53,27 @@
                 </StackPanel>
             </Border>
 
-            <!-- Timeline Display -->
+            <!-- Daftar Tugas -->
             <Border Background="White" CornerRadius="8" Padding="20" BoxShadow="0 2 6 0 #18000000">
                 <DockPanel>
-                    <TextBlock DockPanel.Dock="Top" Text="Timeline Perencanaan Proyek" FontWeight="Bold" FontSize="16" Margin="0,0,0,10" Foreground="#333333"/>
+                    <TextBlock DockPanel.Dock="Top" Text="Daftar Tugas Proyek" FontWeight="Bold" FontSize="16" Margin="0,0,0,10" Foreground="#333333"/>
                     <ScrollViewer MaxHeight="350">
-                        <ItemsControl x:Name="TimelinePanel"/>
+                        <ItemsControl x:Name="TaskListPanel">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:CompileBindings="False">
+                                    <Border BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="5,10">
+                                        <Grid ColumnDefinitions="100, 200, *, 70, 70, Auto">
+                                            <TextBlock Grid.Column="0" Text="{Binding Category}" Foreground="Gray" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,10,0"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding Title}" FontWeight="SemiBold" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,10,0"/>
+                                            <TextBlock Grid.Column="2" Text="{Binding Detail}" Foreground="DimGray" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,10,0"/>
+                                            <TextBlock Grid.Column="3" Text="{Binding EstimatedDays, StringFormat='{}{0}d'}" Foreground="DarkBlue" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                            <TextBlock Grid.Column="4" Text="{Binding BobotLevel}" FontWeight="Bold" Foreground="{Binding BobotColor}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                            <Button Grid.Column="5" Content="Hapus" Tag="{Binding Id}" Click="BtnDeleteTask_Click" Background="#DC3545" Foreground="White" CornerRadius="4" Cursor="Hand" Padding="10,5"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </ScrollViewer>
                 </DockPanel>
             </Border>
