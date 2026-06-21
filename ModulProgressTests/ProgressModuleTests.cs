@@ -24,7 +24,7 @@ namespace ModulProgressTests
         {
             TaskItem task = new TaskItem("Implementasi UI");
             
-            Assert.ThrowsException<InvalidOperationException>(() => 
+            NUnit.Framework.Assert.Throws<InvalidOperationException>(() => 
             {
                 task.TransitionTo(TaskState.Done);
             }, "DbC Gagal: Automata seharusnya menolak transisi ilegal dari ToDo langsung ke Done!");
