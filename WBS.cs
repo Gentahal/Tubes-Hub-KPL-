@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -78,6 +78,9 @@ namespace tubes_hub.Tubes_Hub_KPL_
 
         public void AddTask(string category, string title, string detail)
         {
+            if (!WBSConfig.ContainsKey(category))
+                throw new ArgumentException($"DbC Gagal: Program seharusnya menolak dan error saat kategori kosong!");
+                
             var config = WBSConfig[category];
             int relMonth = 1;
             bool scheduled = false;

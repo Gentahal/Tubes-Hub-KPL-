@@ -23,7 +23,7 @@ namespace TubesHub.Tests
         {
             WBSModule wbs = new WBSModule(1);
             
-            Assert.ThrowsException<ArgumentException>(() => 
+            NUnit.Framework.Assert.Throws<ArgumentException>(() => 
             {
                 wbs.AddTask("", "Bikin Halaman Login", "Deskripsi login");
             }, "DbC Gagal: Program seharusnya menolak dan error saat kategori kosong!");
