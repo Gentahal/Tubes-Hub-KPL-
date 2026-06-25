@@ -20,4 +20,10 @@
 		<None Remove="ModulProgressTests\**" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<None Update="team.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
 </Project>

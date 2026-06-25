@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
+using System.Collections.Generic;
 using System.Linq;
 using TubesHub;
 
@@ -9,6 +10,15 @@ namespace TubesHubGUI
 {
     public partial class TeamInfoView : UserControl
     {
+        // Daftar Role yang ditawarkan di dropdown sebagai pilihan cepat.
+        // "+ Role Baru..." memicu munculnya TextBox untuk ketik Role custom.
+        private static readonly string[] RolePilihanCepat =
+        {
+            "WBS", "Progress", "Team Info", "Scheduler", "Finalisasi", "+ Role Baru..."
+        };
+
+        private const string OpsiRoleBaru = "+ Role Baru...";
+
         public TeamInfoView()
         {
             InitializeComponent();
@@ -142,9 +152,101 @@ namespace TubesHubGUI
                     });
                 }
 
+                // Separator sebelum bagian edit Role
+                cardContent.Children.Add(new Border
+                {
+                    Height = 1,
+                    Background = Brush.Parse("#EEEEEE"),
+                    Margin = new Thickness(0, 4)
+                });
+
+                // --- Bagian Ganti Role ---
+                cardContent.Children.Add(BuatPanelGantiRole(member));
+
                 card.Child = cardContent;
                 PnlMembers.Children.Add(card);
             }
+        }
+
+        private StackPanel BuatPanelGantiRole(TeamMember member)
+        {
+            var panel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
+
+            var roleDropdown = new ComboBox
+            {
+                Width = 160,
+                ItemsSource = RolePilihanCepat,
+                SelectedItem = RolePilihanCepat.Contains(member.Role) ? member.Role : OpsiRoleBaru
+            };
+
+            var roleBaruTextBox = new TextBox
+            {
+                Width = 140,
+                Watermark = "Nama Role baru",
+                IsVisible = !RolePilihanCepat.Contains(member.Role)
+            };
+
+            if (!RolePilihanCepat.Contains(member.Role))
+            {
+                roleBaruTextBox.Text = member.Role;
+            }
+
+            roleDropdown.SelectionChanged += (_, _) =>
+            {
+                roleBaruTextBox.IsVisible = roleDropdown.SelectedItem as string == OpsiRoleBaru;
+            };
+
+            var statusText = new TextBlock
+            {
+                FontSize = 12,
+                Foreground = Brush.Parse("#888888"),
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            var simpanButton = new Button
+            {
+                Content = "Simpan Role",
+                Padding = new Thickness(12, 4)
+            };
+
+            simpanButton.Click += (_, _) =>
+            {
+                string roleTerpilih = roleDropdown.SelectedItem as string ?? "";
+                string roleBaru = roleTerpilih == OpsiRoleBaru
+                    ? roleBaruTextBox.Text?.Trim() ?? ""
+                    : roleTerpilih;
+
+                // --- Defensive check (DbC) ---
+                if (string.IsNullOrWhiteSpace(roleBaru))
+                {
+                    statusText.Text = "Role tidak boleh kosong.";
+                    statusText.Foreground = Brush.Parse("#C62828");
+                    return;
+                }
+
+                if (roleBaru.Equals(member.Role, System.StringComparison.OrdinalIgnoreCase))
+                {
+                    statusText.Text = $"Role sudah '{roleBaru}'.";
+                    statusText.Foreground = Brush.Parse("#888888");
+                    return;
+                }
+
+                string roleLama = member.Role;
+                member.Role = roleBaru;
+
+                statusText.Text = $"Role diubah dari '{roleLama}' ke '{roleBaru}' (sesi ini saja).";
+                statusText.Foreground = Brush.Parse("#2E7D32");
+
+                // Refresh seluruh tampilan supaya badge Role ikut update
+                LoadTeamData();
+            };
+
+            panel.Children.Add(roleDropdown);
+            panel.Children.Add(roleBaruTextBox);
+            panel.Children.Add(simpanButton);
+            panel.Children.Add(statusText);
+
+            return panel;
         }
 
         private static IBrush GetRoleBadgeColor(string role)
